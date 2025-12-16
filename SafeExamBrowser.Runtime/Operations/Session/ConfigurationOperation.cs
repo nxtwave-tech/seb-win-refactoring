@@ -93,13 +93,16 @@ namespace SafeExamBrowser.Runtime.Operations.Session
 			return OperationResult.Success;
 		}
 
-		private OperationResult LoadDefaultSettings()
-		{
-			Logger.Info("No valid configuration resource specified and no local client configuration found - loading default settings...");
-			Context.Next.Settings = repository.LoadDefaultSettings();
+	private OperationResult LoadDefaultSettings()
+	{
+		Logger.Info("No valid configuration resource specified and no local client configuration found - loading default settings...");
+		Context.Next.Settings = repository.LoadDefaultSettings();
+		
+		// Copy login token to browser settings if available
+		CopyLoginTokenToBrowserSettings();
 
-			return OperationResult.Success;
-		}
+		return OperationResult.Success;
+	}
 
 		private OperationResult LoadSettingsForStartup(Uri uri, UriSource source)
 		{
@@ -174,6 +177,9 @@ namespace SafeExamBrowser.Runtime.Operations.Session
 				var isNewConfiguration = source == UriSource.CommandLine || source == UriSource.Reconfiguration;
 
 				Context.Next.Settings = settings;
+				
+				// Copy login token to browser settings if available
+				CopyLoginTokenToBrowserSettings();
 
 				if (status == LoadStatus.LoadWithBrowser)
 				{
@@ -401,19 +407,25 @@ namespace SafeExamBrowser.Runtime.Operations.Session
 			ShowMessageBox(message, title, icon: error, messagePlaceholders: placeholders);
 		}
 
-		private bool TryInitializeSettingsUri(out Uri uri, out UriSource source)
+	private bool TryInitializeSettingsUri(out Uri uri, out UriSource source)
+	{
+		var isValidUri = false;
+
+		uri = default;
+		source = default;
+
+		if (commandLineArgs?.Length > 1)
 		{
-			var isValidUri = false;
-
-			uri = default;
-			source = default;
-
-			if (commandLineArgs?.Length > 1)
+			isValidUri = Uri.TryCreate(commandLineArgs[1], UriKind.Absolute, out uri);
+			source = UriSource.CommandLine;
+			Logger.Info($"Found command-line argument for configuration resource: '{uri}', the URI is {(isValidUri ? "valid" : "invalid")}.");
+			
+			// Extract login token from URL if present
+			if (isValidUri && uri != null)
 			{
-				isValidUri = Uri.TryCreate(commandLineArgs[1], UriKind.Absolute, out uri);
-				source = UriSource.CommandLine;
-				Logger.Info($"Found command-line argument for configuration resource: '{uri}', the URI is {(isValidUri ? "valid" : "invalid")}.");
+				ExtractLoginToken(uri);
 			}
+		}
 
 			if (!isValidUri && File.Exists(ProgramDataFilePath))
 			{
@@ -440,6 +452,52 @@ namespace SafeExamBrowser.Runtime.Operations.Session
 			isValidUri &= File.Exists(path);
 
 			return isValidUri;
+		}
+
+		private void ExtractLoginToken(Uri uri)
+		{
+			try
+			{
+				var query = uri.Query;
+				if (!string.IsNullOrEmpty(query))
+				{
+					// Remove leading '?' from query string
+					if (query.StartsWith("?"))
+					{
+						query = query.Substring(1);
+					}
+					
+					// Parse query parameters manually
+					var parameters = query.Split('&');
+					foreach (var param in parameters)
+					{
+						var keyValue = param.Split('=');
+						if (keyValue.Length == 2 && keyValue[0].Equals("token", StringComparison.OrdinalIgnoreCase))
+						{
+							var token = Uri.UnescapeDataString(keyValue[1]);
+							if (!string.IsNullOrEmpty(token))
+							{
+								Context.Next.LoginToken = token;
+								Logger.Info("Login token extracted from URL and will be passed to start URL.");
+								break;
+							}
+						}
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				Logger.Warn($"Failed to extract login token from URL: {ex.Message}");
+			}
+		}
+
+		private void CopyLoginTokenToBrowserSettings()
+		{
+			if (!string.IsNullOrEmpty(Context.Next.LoginToken) && Context.Next.Settings?.Browser != null)
+			{
+				Context.Next.Settings.Browser.LoginToken = Context.Next.LoginToken;
+				Logger.Info($"Login token copied to browser settings for URL injection.");
+			}
 		}
 
 		private void LogOperationResult(OperationResult result)

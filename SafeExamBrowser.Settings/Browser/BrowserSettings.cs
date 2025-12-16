@@ -223,17 +223,22 @@ namespace SafeExamBrowser.Settings.Browser
 		/// </summary>
 		public bool UseStartUrlAsHomeUrl { get; set; }
 
-		/// <summary>
-		/// Determines whether a temporary directory should be used for down- and uploads.
-		/// </summary>
-		public bool UseTemporaryDownAndUploadDirectory { get; set; }
+	/// <summary>
+	/// Determines whether a temporary directory should be used for down- and uploads.
+	/// </summary>
+	public bool UseTemporaryDownAndUploadDirectory { get; set; }
 
-		public BrowserSettings()
-		{
-			AdditionalWindow = new WindowSettings();
-			Filter = new FilterSettings();
-			MainWindow = new WindowSettings();
-			Proxy = new ProxySettings();
-		}
+	/// <summary>
+	/// The login token to be appended to the start URL, extracted from the URL handler.
+	/// </summary>
+	public string LoginToken { get; set; }
+
+	public BrowserSettings()
+	{
+		AdditionalWindow = new WindowSettings();
+		Filter = new FilterSettings();
+		MainWindow = new WindowSettings();
+		Proxy = new ProxySettings();
 	}
+}
 }

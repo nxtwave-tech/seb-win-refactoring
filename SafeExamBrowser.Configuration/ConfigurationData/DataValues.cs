@@ -202,6 +202,7 @@ namespace SafeExamBrowser.Configuration.ConfigurationData
 			settings.Browser.UseIsolatedClipboard = true;
 			settings.Browser.UseQueryParameter = false;
 			settings.Browser.UseTemporaryDownAndUploadDirectory = false;
+			settings.Browser.LoginToken = null; // Will be populated from URL handler if present
 
 			settings.ConfigurationMode = ConfigurationMode.Exam;
 

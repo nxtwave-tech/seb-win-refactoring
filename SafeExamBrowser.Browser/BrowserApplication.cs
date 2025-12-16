@@ -290,24 +290,41 @@ namespace SafeExamBrowser.Browser
 			}
 		}
 
-		private string GenerateStartUrl()
+	private string GenerateStartUrl()
+	{
+		var url = settings.StartUrl;
+
+		if (settings.UseQueryParameter)
 		{
-			var url = settings.StartUrl;
-
-			if (settings.UseQueryParameter)
+			if (url.Contains("?") && settings.StartUrlQuery?.Length > 1 && Uri.TryCreate(url, UriKind.Absolute, out var uri))
 			{
-				if (url.Contains("?") && settings.StartUrlQuery?.Length > 1 && Uri.TryCreate(url, UriKind.Absolute, out var uri))
-				{
-					url = url.Replace(uri.Query, $"{uri.Query}&{settings.StartUrlQuery.Substring(1)}");
-				}
-				else
-				{
-					url = $"{url}{settings.StartUrlQuery}";
-				}
+				url = url.Replace(uri.Query, $"{uri.Query}&{settings.StartUrlQuery.Substring(1)}");
 			}
-
-			return url;
+			else
+			{
+				url = $"{url}{settings.StartUrlQuery}";
+			}
 		}
+
+		// Inject login token if available
+		if (!string.IsNullOrEmpty(settings.LoginToken))
+		{
+			var tokenParam = $"token={Uri.EscapeDataString(settings.LoginToken)}";
+			
+			if (url.Contains("?"))
+			{
+				url = $"{url}&{tokenParam}";
+			}
+			else
+			{
+				url = $"{url}?{tokenParam}";
+			}
+			
+			logger.Info("Login token injected into start URL.");
+		}
+
+		return url;
+	}
 
 		private void InitializeApplicationInfo()
 		{

@@ -36,9 +36,14 @@ namespace SafeExamBrowser.Configuration.Contracts
 		/// </summary>
 		public Guid SessionId { get; set; }
 
-		/// <summary>
-		/// The settings used for this session.
-		/// </summary>
-		public AppSettings Settings { get; set; }
-	}
+	/// <summary>
+	/// The settings used for this session.
+	/// </summary>
+	public AppSettings Settings { get; set; }
+
+	/// <summary>
+	/// The login token extracted from the URL handler, to be passed to the start URL.
+	/// </summary>
+	public string LoginToken { get; set; }
+}
 }
