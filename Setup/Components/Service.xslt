@@ -10,8 +10,8 @@
         <xsl:copy>
             <xsl:apply-templates select="@*|node()" />
         </xsl:copy>
-        <wix:ServiceInstall DisplayName="Safe Exam Browser Service" Name="SafeExamBrowser" Account="LocalSystem" ErrorControl="normal" Start="auto"
+        <wix:ServiceInstall DisplayName="Topin Secure Browser Service" Name="TopinSecureBrowser" Account="LocalSystem" ErrorControl="normal" Start="auto"
                             Type="ownProcess" Vital="yes" Interactive="no" Description="Performs operations which require elevated privileges." />
-        <wix:ServiceControl Id="ServiceControl" Name="SafeExamBrowser" Start="install" Stop="uninstall" Remove="uninstall" Wait="yes" />
+        <wix:ServiceControl Id="ServiceControl" Name="TopinSecureBrowser" Start="install" Stop="uninstall" Remove="uninstall" Wait="yes" />
     </xsl:template>
 </xsl:stylesheet>

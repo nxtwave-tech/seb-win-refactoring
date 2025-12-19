@@ -26,7 +26,7 @@ namespace SafeExamBrowser.Configuration.ConfigurationData
 {
 	internal class DataValues
 	{
-		private const string DEFAULT_CONFIGURATION_NAME = "SebClientSettings.seb";
+		private const string DEFAULT_CONFIGURATION_NAME = "TsbClientSettings.tsb";
 		private AppConfig appConfig;
 
 		internal string GetAppDataFilePath()
@@ -42,9 +42,9 @@ namespace SafeExamBrowser.Configuration.ConfigurationData
 			var programCopyright = executable.GetCustomAttribute<AssemblyCopyrightAttribute>().Copyright;
 			var programTitle = executable.GetCustomAttribute<AssemblyTitleAttribute>().Title;
 			var programVersion = executable.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
-			var appDataLocalFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), nameof(SafeExamBrowser));
-			var appDataRoamingFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), nameof(SafeExamBrowser));
-			var programDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), nameof(SafeExamBrowser));
+			var appDataLocalFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "TopinSecureBrowser");
+			var appDataRoamingFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "TopinSecureBrowser");
+			var programDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "TopinSecureBrowser");
 			var temporaryFolder = Path.Combine(appDataLocalFolder, "Temp");
 			var startTime = DateTime.Now;
 			var logFolder = Path.Combine(appDataLocalFolder, "Logs");
@@ -57,7 +57,7 @@ namespace SafeExamBrowser.Configuration.ConfigurationData
 			appConfig.BrowserLogFilePath = Path.Combine(logFolder, $"{logFilePrefix}_Browser.log");
 			appConfig.ClientId = Guid.NewGuid();
 			appConfig.ClientAddress = $"{AppConfig.BASE_ADDRESS}/client/{Guid.NewGuid()}";
-			appConfig.ClientExecutablePath = Path.Combine(Path.GetDirectoryName(executable.Location), $"{nameof(SafeExamBrowser)}.Client.exe");
+			appConfig.ClientExecutablePath = Path.Combine(Path.GetDirectoryName(executable.Location), "SafeExamBrowser.Client.exe");
 			appConfig.ClientLogFilePath = Path.Combine(logFolder, $"{logFilePrefix}_Client.log");
 			appConfig.CodeSignatureHash = certificate?.GetCertHashString();
 			appConfig.ConfigurationFileExtension = ".tsb";

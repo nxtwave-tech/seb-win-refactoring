@@ -111,25 +111,25 @@ namespace SebWindowsConfig.Utilities
 		#region Constants
 
 		// Name and location of SEB configuration files and logfiles
-		public const string SEB_CLIENT_CONFIG = "SebClientSettings.seb";
-		public const string SEB_CLIENT_LOG = "SebClient.log";
+		public const string SEB_CLIENT_CONFIG = "TsbClientSettings.tsb";
+		public const string SEB_CLIENT_LOG = "TsbClient.log";
 		private const string XUL_RUNNER_CONFIG = "config.json";
-		public const string SEB_SHORTNAME = "SEB";
+		public const string SEB_SHORTNAME = "TSB";
 		public const string XUL_RUNNER = "firefox.exe";
 		private const string XUL_RUNNER_INI = "seb.ini";
 
 		// Application path contains [MANUFACTURER]\[PRODUCT_NAME]
 		// (see also "SebWindowsPackageSetup" Project in MS Visual Studio 10)
-		public const string MANUFACTURER_LOCAL     = "SafeExamBrowser";
+		public const string MANUFACTURER_LOCAL     = "TopinSecureBrowser";
         //private const string MANUFACTURER         = "ETH Zuerich";
-        public const string PRODUCT_NAME           = "SafeExamBrowser";
-        public const string SEB_SERVICE_DIRECTORY = "SebWindowsServiceWCF";
-        public const string SEB_BROWSER_DIRECTORY = "SebWindowsBrowser";
+        public const string PRODUCT_NAME           = "TopinSecureBrowser";
+        public const string SEB_SERVICE_DIRECTORY = "TopinSecureBrowserService";
+        public const string SEB_BROWSER_DIRECTORY = "TopinSecureBrowserBrowser";
         private const string XUL_RUNNER_DIRECTORY = "xulrunner";
         private const string XUL_SEB_DIRECTORY = "xul_seb";
         public const string FILENAME_SEB = "SafeExamBrowser.exe";
-        public const string FILENAME_SEBCONFIGTOOL = "SEBConfigTool.exe";
-        public const string FILENAME_SEBSERVICE = "SebWindowsServiceWCF.exe";
+        public const string FILENAME_SEBCONFIGTOOL = "TSBConfigTool.exe";
+        public const string FILENAME_SEBSERVICE = "TopinSecureBrowser.Service.exe";
         public const string FILENAME_DLL_FLECK = "Fleck.dll";
         public const string FILENAME_DLL_ICONLIB = "IconLib.dll";
         public const string FILENAME_DLL_IONICZIP = "Ionic.Zip.dll";
@@ -140,7 +140,7 @@ namespace SebWindowsConfig.Utilities
         public const string BROWSER_USERAGENT_DESKTOP = "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0";
         public const string BROWSER_USERAGENT_TOUCH = "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0; Touch) Gecko/20100101 Firefox/52.0";
         public const string BROWSER_USERAGENT_TOUCH_IPAD = "Mozilla/5.0 (iPad; CPU OS 11_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/11.3 Mobile/15E216 Safari/605.1.15";
-        public const string BROWSER_USERAGENT_SEB = "SEB";
+        public const string BROWSER_USERAGENT_SEB = "TSB";
 
         public  const string END_OF_STRING_KEYWORD   = "---SEB---";
         private const string DEFAULT_USERNAME        = "";

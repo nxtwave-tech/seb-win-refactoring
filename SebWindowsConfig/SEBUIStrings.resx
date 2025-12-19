@@ -337,7 +337,7 @@
     <value>Error</value>
   </data>
   <data name="ErrorWhenOpeningSettingsFile" xml:space="preserve">
-    <value>Error when opening the file SebClientSettings.seb!</value>
+    <value>Error when opening the file TsbClientSettings.tsb!</value>
   </data>
   <data name="OSNotSupported" xml:space="preserve">
     <value>This OS is not supported!</value>

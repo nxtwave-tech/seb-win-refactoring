@@ -193,7 +193,7 @@
     <value>Fehler beim Entschlüsseln der Einstellungen</value>
   </data>
   <data name="ErrorWhenOpeningSettingsFile" xml:space="preserve">
-    <value>Fehler beim Öffnen der Datei SebClientSettings.seb!</value>
+    <value>Fehler beim Öffnen der Datei TsbClientSettings.tsb!</value>
   </data>
   <data name="forceSebServiceMessage" xml:space="preserve">
     <value>Der SEB-Windows-Dienst läuft nicht oder die SEB-Installation wurde beschädigt. Möglicherweise hilft ein Neustart des Rechners oder eine Neuinstallation von SEB. Informieren Sie Ihren Prüfungs-Administrator/Supporter. Die Prüfung kann nicht gestartet werden, SEB wird beendet.</value>

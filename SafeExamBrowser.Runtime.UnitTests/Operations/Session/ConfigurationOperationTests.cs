@@ -33,7 +33,7 @@ namespace SafeExamBrowser.Runtime.UnitTests.Operations.Session
 	[TestClass]
 	public class ConfigurationOperationTests
 	{
-		private const string FILE_NAME = "SebClientSettings.seb";
+		private const string FILE_NAME = "TsbClientSettings.tsb";
 		private static readonly string FILE_PATH = Path.Combine(Path.GetDirectoryName(typeof(ConfigurationOperationTests).Assembly.Location), nameof(Operations), nameof(Session), "Testdata", FILE_NAME);
 
 		private AppConfig appConfig;

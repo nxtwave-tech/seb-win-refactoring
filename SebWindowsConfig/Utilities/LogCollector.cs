@@ -75,7 +75,7 @@ namespace SebWindowsConfig.Utilities
 				{
 					SEBClientInfo.SebClientLogFile,
 					Path.Combine(SEBClientInfo.SebClientSettingsAppDataDirectory, SebWindowsConfigForm.SEB_CONFIG_LOG),
-					Path.Combine(SEBClientInfo.SebClientSettingsAppDataDirectory, "seb.log"),
+					Path.Combine(SEBClientInfo.SebClientSettingsAppDataDirectory, "tsb.log"),
 					Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), @"SafeExamBrowser\SebWindowsServiceWCF\sebwindowsservice.log")
 				};
 				var existingFiles = logFiles.Where(f => File.Exists(f));

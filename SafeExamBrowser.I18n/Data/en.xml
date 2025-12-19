@@ -118,13 +118,13 @@
         Cancel
     </Entry>
     <Entry key="ExamSelectionDialog_Message">
-        Please select one of the available SEB-Server exams:
+        Please select one of the available TSB-Server exams:
     </Entry>
     <Entry key="ExamSelectionDialog_Select">
         Select
     </Entry>
     <Entry key="ExamSelectionDialog_Title">
-        SEB-Server Exams
+        TSB-Server Exams
     </Entry>
     <Entry key="FileSystemDialog_Cancel">
         Cancel
@@ -172,7 +172,7 @@
         Temporarily allow the blacklisted applications. This applies only to the currently running instances and session!
     </Entry>
     <Entry key="LockScreen_ApplicationsMessage">
-        The blacklisted applications listed below were started and could not be automatically terminated! In order to unlock SEB, please select one of the available options and enter the correct unlock password.
+        The blacklisted applications listed below were started and could not be automatically terminated! In order to unlock TSB, please select one of the available options and enter the correct unlock password.
     </Entry>
     <Entry key="LockScreen_ApplicationsTerminateOption">
         Terminate Topin Secure Browser. WARNING: There will be no possibility to save data or perform any further actions, the shutdown will be initiated immediately!
@@ -181,7 +181,7 @@
         Temporarily allow the cursor configuration. This applies only to the currently running session!
     </Entry>
     <Entry key="LockScreen_CursorMessage">
-        A prohibited cursor configuration has been detected. In order to unlock SEB, please select one of the available options and enter the correct unlock password.
+        A prohibited cursor configuration has been detected. In order to unlock TSB, please select one of the available options and enter the correct unlock password.
     </Entry>
     <Entry key="LockScreen_CursorTerminateOption">
         Terminate Topin Secure Browser. WARNING: There will be no possibility to save data or perform any further actions, the shutdown will be initiated immediately!
@@ -190,7 +190,7 @@
         Temporarily allow the display configuration. This applies only to the currently running session!
     </Entry>
     <Entry key="LockScreen_DisplayConfigurationMessage">
-        A prohibited display configuration has been detected. In order to unlock SEB, please select one of the available options and enter the correct unlock password.
+        A prohibited display configuration has been detected. In order to unlock TSB, please select one of the available options and enter the correct unlock password.
     </Entry>
     <Entry key="LockScreen_DisplayConfigurationTerminateOption">
         Terminate Topin Secure Browser. WARNING: There will be no possibility to save data or perform any further actions, the shutdown will be initiated immediately!
@@ -199,25 +199,25 @@
         Temporarily allow the ease of access configuration. This applies only to the currently running session!
     </Entry>
     <Entry key="LockScreen_EaseOfAccessMessage">
-        A prohibited ease of access configuration for the Windows Security Screen has been detected. In order to unlock SEB, please select one of the available options and enter the correct unlock password.
+        A prohibited ease of access configuration for the Windows Security Screen has been detected. In order to unlock TSB, please select one of the available options and enter the correct unlock password.
     </Entry>
     <Entry key="LockScreen_EaseOfAccessTerminateOption">
         Terminate Topin Secure Browser. WARNING: There will be no possibility to save data or perform any further actions, the shutdown will be initiated immediately!
     </Entry>
     <Entry key="LockScreen_SessionIntegrityMessage">
-        The last session with the currently active configuration or start URL was not terminated properly! Please enter the correct password to unlock SEB.
+        The last session with the currently active configuration or start URL was not terminated properly! Please enter the correct password to unlock TSB.
     </Entry>
     <Entry key="LockScreen_StickyKeysContinueOption">
         Temporarily allow the state of the sticky keys. This applies only to the currently running session!
     </Entry>
     <Entry key="LockScreen_StickyKeysMessage">
-        A prohibited state of the sticky keys has been detected. In order to unlock SEB, please select one of the available options and enter the correct unlock password.
+        A prohibited state of the sticky keys has been detected. In order to unlock TSB, please select one of the available options and enter the correct unlock password.
     </Entry>
     <Entry key="LockScreen_StickyKeysTerminateOption">
         Terminate Topin Secure Browser. WARNING: There will be no possibility to save data or perform any further actions, the shutdown will be initiated immediately!
     </Entry>
     <Entry key="LockScreen_Title">
-        SEB LOCKED
+        TSB LOCKED
     </Entry>
     <Entry key="LockScreen_UnlockButton">
         Unlock
@@ -226,13 +226,13 @@
         Unlock Topin Secure Browser.
     </Entry>
     <Entry key="LockScreen_UserSessionMessage">
-        The active user has changed or the computer has been locked! In order to unlock SEB, please select one of the available options and enter the correct unlock password.
+        The active user has changed or the computer has been locked! In order to unlock TSB, please select one of the available options and enter the correct unlock password.
     </Entry>
     <Entry key="LockScreen_UserSessionTerminateOption">
         Terminate Topin Secure Browser. WARNING: There will be no possibility to save data or perform any further actions, the shutdown will be initiated immediately!
     </Entry>
     <Entry key="LockScreen_UserSwitchMessage">
-        The active user has changed! In order to unlock SEB, please select one of the available options and enter the correct unlock password.
+        The active user has changed! In order to unlock TSB, please select one of the available options and enter the correct unlock password.
     </Entry>
     <Entry key="LogWindow_AlwaysOnTop">
         Always on top
@@ -253,7 +253,7 @@
         WARNING: Any unsaved application data might be lost!
     </Entry>
     <Entry key="MessageBox_ApplicationError">
-        An unrecoverable error has occurred! Please consult the log files for more information. SEB will now shut down...
+        An unrecoverable error has occurred! Please consult the log files for more information. TSB will now shut down...
     </Entry>
     <Entry key="MessageBox_ApplicationErrorTitle">
         Application Error
@@ -289,7 +289,7 @@
         Page Blocked
     </Entry>
     <Entry key="MessageBox_BrowserQuitUrlConfirmation">
-        The browser application has detected a quit URL! Would you like to terminate SEB now?
+        The browser application has detected a quit URL! Would you like to terminate TSB now?
     </Entry>
     <Entry key="MessageBox_BrowserQuitUrlConfirmationTitle">
         Quit URL Detected
@@ -298,13 +298,13 @@
         Cancel
     </Entry>
     <Entry key="MessageBox_ClientConfigurationError">
-        The local client configuration has failed! Please consult the log files for more information. SEB will now shut down...
+        The local client configuration has failed! Please consult the log files for more information. TSB will now shut down...
     </Entry>
     <Entry key="MessageBox_ClientConfigurationErrorTitle">
         Configuration Error
     </Entry>
     <Entry key="MessageBox_ClientConfigurationQuestion">
-        The client configuration has been saved and will be used when you start SEB the next time. Do you want to quit for now?
+        The client configuration has been saved and will be used when you start TSB the next time. Do you want to quit for now?
     </Entry>
     <Entry key="MessageBox_ClientConfigurationQuestionTitle">
         Configuration Successful
@@ -316,7 +316,7 @@
         Download Error
     </Entry>
     <Entry key="MessageBox_DisplayConfigurationError">
-        The active display configuration is not permitted. %%_ALLOWED_COUNT_%% %%_TYPE_%% display(s) are allowed, but %%_INTERNAL_COUNT_%% internal and %%_EXTERNAL_COUNT_%% external display(s) were detected. Please consult the log files for more information. SEB will now shut down...
+        The active display configuration is not permitted. %%_ALLOWED_COUNT_%% %%_TYPE_%% display(s) are allowed, but %%_INTERNAL_COUNT_%% internal and %%_EXTERNAL_COUNT_%% external display(s) were detected. Please consult the log files for more information. TSB will now shut down...
     </Entry>
     <Entry key="MessageBox_DisplayConfigurationErrorTitle">
         Prohibited Display Configuration
@@ -328,7 +328,7 @@
         internal or external
     </Entry>
     <Entry key="MessageBox_DownloadNotAllowed">
-        Downloading files is not allowed in the current SEB settings. Please report this to your exam provider.
+        Downloading files is not allowed in the current TSB settings. Please report this to your exam provider.
     </Entry>
     <Entry key="MessageBox_DownloadNotAllowedTitle">
         Downloading Not Allowed!
@@ -346,19 +346,19 @@
         Invalid Password
     </Entry>
     <Entry key="MessageBox_InvalidPasswordError">
-        You failed to enter the correct password within 5 attempts. SEB will now terminate...
+        You failed to enter the correct password within 5 attempts. TSB will now terminate...
     </Entry>
     <Entry key="MessageBox_InvalidPasswordErrorTitle">
         Invalid Password
     </Entry>
     <Entry key="MessageBox_InvalidQuitPassword">
-        SEB can only be terminated by entering the correct quit password.
+        TSB can only be terminated by entering the correct quit password.
     </Entry>
     <Entry key="MessageBox_InvalidQuitPasswordTitle">
         Invalid Quit Password
     </Entry>
     <Entry key="MessageBox_InvalidUnlockPassword">
-        SEB can only be unlocked by entering the correct password.
+        TSB can only be unlocked by entering the correct password.
     </Entry>
     <Entry key="MessageBox_InvalidUnlockPasswordTitle">
         Invalid Unlock Password
@@ -388,7 +388,7 @@
         Reload?
     </Entry>
     <Entry key="MessageBox_Quit">
-        Do you want to quit SEB?
+        Do you want to quit TSB?
     </Entry>
     <Entry key="MessageBox_QuitTitle">
         Quit?
@@ -400,7 +400,7 @@
         Quit Error
     </Entry>
     <Entry key="MessageBox_ReconfigurationDenied">
-        You are not allowed to reconfigure SEB.
+        You are not allowed to reconfigure TSB.
     </Entry>
     <Entry key="MessageBox_ReconfigurationDeniedTitle">
         Reconfiguration Denied
@@ -412,7 +412,7 @@
         Reconfiguration Error
     </Entry>
     <Entry key="MessageBox_RemoteSessionNotAllowed">
-        The system appears to be running in a remote session. The selected configuration does not allow SEB to be run in a remote session.
+        The system appears to be running in a remote session. The selected configuration does not allow TSB to be run in a remote session.
     </Entry>
     <Entry key="MessageBox_RemoteSessionNotAllowedTitle">
         Remote Session Detected
@@ -424,19 +424,19 @@
         Session with Screen Proctoring
     </Entry>
     <Entry key="MessageBox_ServiceUnavailableError">
-        Failed to initialize the SEB service! SEB will now terminate since the service is configured to be mandatory.
+        Failed to initialize the TSB service! TSB will now terminate since the service is configured to be mandatory.
     </Entry>
     <Entry key="MessageBox_ServiceUnavailableErrorTitle">
         Service Unavailable
     </Entry>
     <Entry key="MessageBox_ServiceUnavailableWarning">
-        Failed to initialize the SEB service. SEB will continue initialization since the service is configured to be optional.
+        Failed to initialize the TSB service. TSB will continue initialization since the service is configured to be optional.
     </Entry>
     <Entry key="MessageBox_ServiceUnavailableWarningTitle">
         Service Unavailable
     </Entry>
     <Entry key="MessageBox_SessionStartError">
-        SEB failed to start a new session! Please consult the log files for more information.
+        TSB failed to start a new session! Please consult the log files for more information.
     </Entry>
     <Entry key="MessageBox_SessionStartErrorTitle">
         Session Start Error
@@ -460,28 +460,28 @@
         Configuration Error
     </Entry>
     <Entry key="MessageBox_UploadNotAllowed">
-        Uploading files is not allowed in the current SEB settings. Please report this to your exam provider.
+        Uploading files is not allowed in the current TSB settings. Please report this to your exam provider.
     </Entry>
     <Entry key="MessageBox_UploadNotAllowedTitle">
         Uploading Not Allowed!
     </Entry>
     <Entry key="MessageBox_VersionRestrictionError">
-        The installed SEB version %%_VERSION_%% cannot be used as the selected configuration requires to use a specific version:%%_REQUIRED_VERSIONS_%%Please download and install the required version from the official website (safeexambrowser.org/download) or from the repository of SEB for Windows on GitHub (github.com/safeexambrowser).
+        The installed TSB version %%_VERSION_%% cannot be used as the selected configuration requires to use a specific version:%%_REQUIRED_VERSIONS_%%Please download and install the required version from the official website (safeexambrowser.org/download) or from the repository of TSB for Windows on GitHub (github.com/safeexambrowser).
     </Entry>
     <Entry key="MessageBox_VersionRestrictionErrorTitle">
-        Invalid SEB Version
+        Invalid TSB Version
     </Entry>
     <Entry key="MessageBox_VersionRestrictionMinimum">
-        SEB %%_VERSION_%% or newer
+        TSB %%_VERSION_%% or newer
     </Entry>
     <Entry key="MessageBox_VideoProctoringDisclaimer">
-        The current session will be remote proctored using a live video and audio stream, which is sent to an individually configured server. Ask your examinator about their privacy policy. SEB itself doesn't connect to any centralized SEB proctoring server, your exam provider decides which proctoring service/server to use.
+        The current session will be remote proctored using a live video and audio stream, which is sent to an individually configured server. Ask your examinator about their privacy policy. TSB itself doesn't connect to any centralized TSB proctoring server, your exam provider decides which proctoring service/server to use.
     </Entry>
     <Entry key="MessageBox_VideoProctoringDisclaimerTitle">
         Session with Remote Proctoring
     </Entry>
     <Entry key="MessageBox_VirtualMachineNotAllowed">
-        This computer appears to be a virtual machine. The selected configuration does not allow SEB to be run in a virtual machine.
+        This computer appears to be a virtual machine. The selected configuration does not allow TSB to be run in a virtual machine.
     </Entry>
     <Entry key="MessageBox_VirtualMachineNotAllowedTitle">
         Virtual Machine Detected
@@ -490,13 +490,13 @@
         Yes
     </Entry>
     <Entry key="MessageBox_ZoomNotSupported">
-        The selected configuration requires remote proctoring with Zoom, which this SEB version does not support. Please download and install the SEB version specified by your exam organizer. Due to licensing issues, remote proctoring with Zoom is only available for SEB Alliance members. Please refer to https://safeexambrowser.org/alliance for more information.
+        The selected configuration requires remote proctoring with Zoom, which this TSB version does not support. Please download and install the TSB version specified by your exam organizer. Due to licensing issues, remote proctoring with Zoom is only available for TSB Alliance members. Please refer to https://safeexambrowser.org/alliance for more information.
     </Entry>
     <Entry key="MessageBox_ZoomNotSupportedTitle">
         Zoom Proctoring Required
     </Entry>
     <Entry key="Notification_AboutTooltip">
-        Information about SEB
+        Information about TSB
     </Entry>
     <Entry key="Notification_LogTooltip">
         Application Log
@@ -529,7 +529,7 @@
         Finalizing clipboard
     </Entry>
     <Entry key="OperationStatus_FinalizeServer">
-        Finalizing SEB-Server
+        Finalizing TSB-Server
     </Entry>
     <Entry key="OperationStatus_FinalizeServiceSession">
         Finalizing service session
@@ -562,7 +562,7 @@
         Initializing runtime connection
     </Entry>
     <Entry key="OperationStatus_InitializeServer">
-        Initializing SEB-Server
+        Initializing TSB-Server
     </Entry>
     <Entry key="OperationStatus_InitializeServiceSession">
         Initializing service session
@@ -682,7 +682,7 @@
         Password Required
     </Entry>
     <Entry key="PasswordDialog_QuitPasswordRequired">
-        Please enter the quit password in order to terminate SEB:
+        Please enter the quit password in order to terminate TSB:
     </Entry>
     <Entry key="PasswordDialog_QuitPasswordRequiredTitle">
         Password Required
@@ -724,7 +724,7 @@
         Screen Proctoring Finalization
     </Entry>
     <Entry key="RuntimeWindow_ApplicationRunning">
-        SEB is running.
+        TSB is running.
     </Entry>
     <Entry key="ServerFailureDialog_Abort">
         Abort
@@ -733,13 +733,13 @@
         Fallback
     </Entry>
     <Entry key="ServerFailureDialog_Message">
-        An error occurred while trying to communicate with the SEB server.
+        An error occurred while trying to communicate with the TSB server.
     </Entry>
     <Entry key="ServerFailureDialog_Retry">
         Retry
     </Entry>
     <Entry key="ServerFailureDialog_Title">
-        SEB-Server Error
+        TSB-Server Error
     </Entry>
     <Entry key="Shell_QuitButton">
         Terminate Session

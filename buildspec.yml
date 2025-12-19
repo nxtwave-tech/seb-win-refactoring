@@ -1,0 +1,167 @@
+# AWS CodeBuild specification for TSB (Topin Secure Browser)
+# This file defines the build process for AWS CodeBuild
+
+version: 0.2
+
+# Environment configuration
+env:
+  variables:
+    # Build configuration
+    BUILD_CONFIGURATION: "Release"
+    BUILD_PLATFORMS: "x64,x86"
+    
+    # PowerShell execution policy
+    POWERSHELL_EXECUTION_POLICY: "Bypass"
+    
+  parameter-store:
+    # Store sensitive values in AWS Systems Manager Parameter Store
+    # Example: S3_BUCKET_NAME: "/tsb/build/s3-bucket"
+    # Example: S3_PREFIX: "/tsb/build/s3-prefix"
+    
+  # Uncomment and configure if using parameter store
+  # parameter-store:
+  #   S3_BUCKET_NAME: "/tsb/build/s3-bucket-name"
+  #   S3_PREFIX: "/tsb/build/s3-prefix"
+
+# Build phases
+phases:
+  install:
+    runtime-versions:
+      # Use .NET Framework 4.8 runtime
+      dotnet: 4.8
+    
+    commands:
+      - echo "=== TSB Build Environment Setup ==="
+      - echo "CodeBuild Image: $CODEBUILD_BUILD_IMAGE"
+      - echo "Build ID: $CODEBUILD_BUILD_ID"
+      - echo "Source Version: $CODEBUILD_RESOLVED_SOURCE_VERSION"
+      - echo "Build Configuration: $BUILD_CONFIGURATION"
+      - echo "Build Platforms: $BUILD_PLATFORMS"
+      
+      # Verify PowerShell version
+      - powershell -Command "Write-Host 'PowerShell Version:' $PSVersionTable.PSVersion"
+      
+      # Set PowerShell execution policy
+      - powershell -Command "Set-ExecutionPolicy $env:POWERSHELL_EXECUTION_POLICY -Scope CurrentUser -Force"
+      
+      # Verify AWS CLI
+      - aws --version
+      - aws sts get-caller-identity
+
+  pre_build:
+    commands:
+      - echo "=== Pre-Build Phase ==="
+      
+      # Display environment information
+      - echo "Working Directory: $(pwd)"
+      - dir
+      
+      # Verify build scripts exist
+      - powershell -Command "if (Test-Path 'scripts/build-and-deploy.ps1') { Write-Host 'Build scripts found' } else { throw 'Build scripts not found' }"
+      
+      # Setup environment (install tools)
+      - echo "Setting up build environment..."
+      - powershell -ExecutionPolicy Bypass -File scripts/setup-environment.ps1
+      
+      # Verify setup completed successfully
+      - echo "Verifying environment setup..."
+      - powershell -Command "if ($env:MSBUILD_PATH -and (Test-Path $env:MSBUILD_PATH)) { Write-Host 'MSBuild ready:' $env:MSBUILD_PATH } else { throw 'MSBuild not found after setup' }"
+      - powershell -Command "if ($env:WIX -and (Test-Path $env:WIX)) { Write-Host 'WiX ready:' $env:WIX } else { throw 'WiX not found after setup' }"
+
+  build:
+    commands:
+      - echo "=== Build Phase ==="
+      
+      # Parse platforms from environment variable
+      - powershell -Command "$platforms = '$env:BUILD_PLATFORMS' -split ','; Write-Host 'Building for platforms:' ($platforms -join ', ')"
+      
+      # Run the complete build pipeline
+      - echo "Starting TSB build pipeline..."
+      - |
+        if [ -n "$S3_BUCKET_NAME" ]; then
+          echo "Building and deploying to S3: $S3_BUCKET_NAME"
+          if [ -n "$S3_PREFIX" ]; then
+            powershell -ExecutionPolicy Bypass -File scripts/build-and-deploy.ps1 -Configuration $BUILD_CONFIGURATION -Platforms ($env:BUILD_PLATFORMS -split ',') -S3Bucket $env:S3_BUCKET_NAME -S3Prefix $env:S3_PREFIX -SkipSetup
+          else
+            powershell -ExecutionPolicy Bypass -File scripts/build-and-deploy.ps1 -Configuration $BUILD_CONFIGURATION -Platforms ($env:BUILD_PLATFORMS -split ',') -S3Bucket $env:S3_BUCKET_NAME -SkipSetup
+          fi
+        else
+          echo "Building without S3 deployment (S3_BUCKET_NAME not set)"
+          powershell -ExecutionPolicy Bypass -File scripts/build-and-deploy.ps1 -Configuration $BUILD_CONFIGURATION -Platforms ($env:BUILD_PLATFORMS -split ',') -SkipSetup -SkipUpload
+        fi
+
+  post_build:
+    commands:
+      - echo "=== Post-Build Phase ==="
+      
+      # Display build results
+      - echo "Build completed with exit code: $CODEBUILD_BUILD_SUCCEEDING"
+      
+      # Show artifact summary if available
+      - |
+        if [ -f "artifact-info.json" ]; then
+          echo "Artifact Summary:"
+          powershell -Command "Get-Content artifact-info.json | ConvertFrom-Json | ConvertTo-Json -Depth 2"
+        fi
+      
+      # Show deployment manifest if available
+      - |
+        if [ -f "deployment-manifest.json" ]; then
+          echo "Deployment Manifest:"
+          powershell -Command "Get-Content deployment-manifest.json | ConvertFrom-Json | Select-Object -ExpandProperty deployment | ConvertTo-Json -Depth 2"
+        fi
+      
+      # Display final status
+      - |
+        if [ "$CODEBUILD_BUILD_SUCCEEDING" = "1" ]; then
+          echo "✓ TSB build pipeline completed successfully!"
+        else
+          echo "✗ TSB build pipeline failed!"
+        fi
+
+# Artifacts configuration
+artifacts:
+  files:
+    # Include all artifacts
+    - 'artifacts/**/*'
+    
+    # Include build metadata
+    - 'build-info.json'
+    - 'artifact-info.json'
+    - 'deployment-manifest.json'
+    
+    # Include logs (if any)
+    - '**/*.log'
+    
+  name: tsb-build-artifacts-$CODEBUILD_BUILD_NUMBER
+  
+  # Exclude unnecessary files to reduce artifact size
+  discard-paths: no
+
+# Reports configuration (optional)
+reports:
+  # Unit test reports (if tests generate reports)
+  tsb-unit-tests:
+    files:
+      - '**/*TestResults.xml'
+      - '**/TestResults/**/*.xml'
+    file-format: 'VSTEST'
+    
+  # Code coverage reports (if enabled)
+  tsb-code-coverage:
+    files:
+      - '**/coverage.xml'
+      - '**/coverage/**/*.xml'
+    file-format: 'COBERTURAXML'
+
+# Cache configuration (optional - speeds up subsequent builds)
+cache:
+  paths:
+    # Cache NuGet packages
+    - '%USERPROFILE%\.nuget\packages\**/*'
+    
+    # Cache downloaded tools (if setup script supports caching)
+    - 'C:\BuildTools\**/*'
+    - 'C:\Program Files (x86)\WiX Toolset v3.14\**/*'
+
+

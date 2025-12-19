@@ -18,7 +18,7 @@ namespace SafeExamBrowser.Service
 		public Service()
 		{
 			CanPauseAndContinue = false;
-			ServiceName = nameof(SafeExamBrowser);
+			ServiceName = "TopinSecureBrowser";
 		}
 
 		public static void Main()

@@ -230,7 +230,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Operations\Session\Testdata\SebClientSettings.seb">
+    <None Include="Operations\Session\Testdata\TsbClientSettings.tsb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

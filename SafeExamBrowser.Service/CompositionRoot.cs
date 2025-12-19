@@ -72,7 +72,7 @@ namespace SafeExamBrowser.Service
 
 		private string BuildBackupFilePath()
 		{
-			var appDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), nameof(SafeExamBrowser));
+			var appDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "TopinSecureBrowser");
 			var filePath = Path.Combine(appDataFolder, AppConfig.BACKUP_FILE_NAME);
 
 			return filePath;
@@ -91,7 +91,7 @@ namespace SafeExamBrowser.Service
 
 		private void InitializeLogging()
 		{
-			var appDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), nameof(SafeExamBrowser));
+			var appDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "TopinSecureBrowser");
 			var logFolder = Path.Combine(appDataFolder, "Logs");
 			var logFilePrefix = DateTime.Now.ToString("yyyy-MM-dd\\_HH\\hmm\\mss\\s");
 			var logFilePath = Path.Combine(logFolder, $"{logFilePrefix}_Service.log");

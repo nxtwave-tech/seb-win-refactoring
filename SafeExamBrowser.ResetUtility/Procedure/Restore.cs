@@ -26,7 +26,7 @@ namespace SafeExamBrowser.ResetUtility.Procedure
 
 		internal override ProcedureStepResult Execute()
 		{
-			var filePath = $@"config\systemprofile\AppData\Local\{nameof(SafeExamBrowser)}\{AppConfig.BACKUP_FILE_NAME}";
+			var filePath = $@"config\systemprofile\AppData\Local\TopinSecureBrowser\{AppConfig.BACKUP_FILE_NAME}";
 			var x86FilePath = Environment.ExpandEnvironmentVariables($@"%WINDIR%\system32\{filePath}");
 			var x64FilePath = Environment.ExpandEnvironmentVariables($@"%WINDIR%\SysWOW64\{filePath}");
 

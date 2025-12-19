@@ -1666,7 +1666,7 @@ namespace SebWindowsConfig
 			}
 			if (!SaveConfigurationFileFromEditor(filename))
 			{
-				// SebClientSettings.seb config file wasn't saved successfully, revert changed settings
+				// TsbClientSettings.tsb config file wasn't saved successfully, revert changed settings
 				// Restore the old Browser Exam Key salt
 				SEBSettings.settingsCurrent[SEBSettings.KeyExamKeySalt] = currentExamKeySalt;
 				return;

@@ -367,7 +367,7 @@ namespace SebWindowsConfig
 		}
 		
 		/// <summary>
-		///   Looks up a localized string similar to Error when opening the file SebClientSettings.seb!.
+		///   Looks up a localized string similar to Error when opening the file TsbClientSettings.tsb!.
 		/// </summary>
 		public static string ErrorWhenOpeningSettingsFile {
 			get {
