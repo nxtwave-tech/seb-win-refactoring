@@ -1,12 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
     <Fragment>
+        <!-- Start Menu Shortcut Component -->
         <Component Id="ShortcutComponent" Directory="StartMenuDirectory">
             <Shortcut Id="ApplicationShortcut" Name="Topin Secure Browser" Icon="ApplicationIcon" IconIndex="0" Advertise="no" Directory="ProgramMenuFolder"
                       Target="[ApplicationDirectory]\$(var.SafeExamBrowser.Runtime.TargetFileName)" WorkingDirectory="ApplicationDirectory"
                       Description="Starts the main application." />
+            <Shortcut Id="TSBShortcut" Name="TSB" Icon="ApplicationIcon" IconIndex="0" Advertise="no" Directory="ProgramMenuFolder"
+                      Target="[ApplicationDirectory]\$(var.SafeExamBrowser.Runtime.TargetFileName)" WorkingDirectory="ApplicationDirectory"
+                      Description="Topin Secure Browser (TSB) - Starts the main application." />
             <RemoveFolder Id="RemoveStartMenuDirectory" On="uninstall" />
             <RegistryValue Root="HKCU" Key="Software\[Manufacturer]\[ProductName]" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+        </Component>
+        
+        <!-- Desktop Shortcut Component -->
+        <Component Id="DesktopShortcutComponent" Directory="TARGETDIR">
+            <Shortcut Id="DesktopShortcut" Name="Topin Secure Browser" Icon="ApplicationIcon" IconIndex="0" Advertise="no" Directory="DesktopFolder"
+                      Target="[ApplicationDirectory]\$(var.SafeExamBrowser.Runtime.TargetFileName)" WorkingDirectory="ApplicationDirectory"
+                      Description="Starts the main application." />
+            <RegistryValue Root="HKCU" Key="Software\[Manufacturer]\[ProductName]" Name="desktop_shortcut" Type="integer" Value="1" KeyPath="yes" />
+        </Component>
+        
+        <!-- Search Keywords Component for Better Discoverability -->
+        <Component Id="SearchKeywordsComponent" Directory="TARGETDIR">
+            <!-- Add registry entries for search keywords and app paths -->
+            <RegistryValue Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\TSB.exe" 
+                          Value="[ApplicationDirectory]$(var.SafeExamBrowser.Runtime.TargetFileName)" Type="string" />
+            <RegistryValue Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\TSB.exe" 
+                          Name="Path" Value="[ApplicationDirectory]" Type="string" />
+            
+            <!-- Register application with Windows for better search -->
+            <RegistryValue Root="HKLM" Key="SOFTWARE\RegisteredApplications" 
+                          Name="TopinSecureBrowser" Value="SOFTWARE\NxtWave\Topin Secure Browser\Capabilities" Type="string" />
+            <RegistryValue Root="HKLM" Key="SOFTWARE\NxtWave\Topin Secure Browser\Capabilities" 
+                          Name="ApplicationName" Value="Topin Secure Browser" Type="string" />
+            <RegistryValue Root="HKLM" Key="SOFTWARE\NxtWave\Topin Secure Browser\Capabilities" 
+                          Name="ApplicationDescription" Value="TSB - Topin Secure Browser for secure exam environments" Type="string" />
+            
+            <RegistryValue Root="HKCU" Key="Software\[Manufacturer]\[ProductName]" Name="search_keywords" Type="integer" Value="1" KeyPath="yes" />
         </Component>
     </Fragment>
 </Wix>

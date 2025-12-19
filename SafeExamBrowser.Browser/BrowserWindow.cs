@@ -428,20 +428,12 @@ namespace SafeExamBrowser.Browser
 
 		private void DisplayHandler_FaviconChanged(string uri)
 		{
-			Task.Run(() =>
-			{
-				var request = new HttpRequestMessage(HttpMethod.Head, uri);
-				var response = httpClient.SendAsync(request).ContinueWith(task =>
-				{
-					if (task.IsCompleted && task.Result.IsSuccessStatusCode)
-					{
-						Icon = new BrowserIconResource(uri);
-
-						IconChanged?.Invoke(Icon);
-						window.UpdateIcon(Icon);
-					}
-				});
-			});
+			// Always use the default TSB icon instead of website favicons
+			// This ensures consistent branding and prevents icon visibility issues
+			Icon = new BrowserIconResource();
+			IconChanged?.Invoke(Icon);
+			window.UpdateIcon(Icon);
+			logger.Debug($"Favicon change requested for {uri}, but using default TSB icon for consistent branding.");
 		}
 
 		private void DisplayHandler_ProgressChanged(double value)

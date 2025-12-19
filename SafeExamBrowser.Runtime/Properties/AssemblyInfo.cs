@@ -10,7 +10,7 @@ using System.Windows;
 [assembly: AssemblyDescription("Topin Secure Browser")]
 [assembly: AssemblyCompany("NxtWave")]
 [assembly: AssemblyProduct("Topin Secure Browser")]
-[assembly: AssemblyCopyright("Copyright � 2025 NxtWave")]
+[assembly: AssemblyCopyright("Copyright © 2010-2025 ETH Zürich, IT Services. Modifications © 2025 NxtWave")]
 
 // Setting ComVisible to false makes the types in this assembly not visible
 // to COM components.  If you need to access a type in this assembly from

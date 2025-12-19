@@ -16,6 +16,7 @@
             <Directory Id="ProgramMenuFolder">
                 <Directory Id="StartMenuDirectory" Name="TopinSecureBrowser" />
             </Directory>
+            <Directory Id="DesktopFolder" />
         </Directory>
     </Fragment>
 </Wix>
