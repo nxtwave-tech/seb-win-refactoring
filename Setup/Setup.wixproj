@@ -128,15 +128,16 @@ git -C $(SolutionDir) checkout -- Setup/Components/Service.wxs</PostBuildEvent>
 	</Target>
 	-->
   <PropertyGroup>
-    <SignOutput>false</SignOutput>
+    <SignOutput Condition=" '$(SignOutput)' == '' ">false</SignOutput>
   </PropertyGroup>
-  <!-- Signing disabled for custom builds -->
-  <!--<Target Name="SignCabs">
-    <Exec Command="signtool sign /sha1 ecac9df025f5d208f6190fc4d6f9d329576598c7 /sm /tr http://timestamp.digicert.com /td sha256 /fd sha256 &quot;%(SignCabs.FullPath)&quot;" />
+  <!-- Signing is delegated to scripts/sign-file.ps1 (jsign + AWS KMS). Set SignOutput=true
+       to enable; signing configuration comes from the TSB_SIGN_* environment variables. -->
+  <Target Name="SignCabs">
+    <Exec Command="powershell -NoProfile -ExecutionPolicy Bypass -File &quot;$(SolutionDir)scripts\sign-file.ps1&quot; -FilePath &quot;%(SignCabs.FullPath)&quot;" />
   </Target>
   <Target Name="SignMsi">
-    <Exec Command="signtool sign /sha1 ecac9df025f5d208f6190fc4d6f9d329576598c7 /sm /tr http://timestamp.digicert.com /td sha256 /fd sha256 /d &quot;Topin Secure Browser&quot; &quot;%(SignMsi.FullPath)&quot;" />
-  </Target>-->
+    <Exec Command="powershell -NoProfile -ExecutionPolicy Bypass -File &quot;$(SolutionDir)scripts\sign-file.ps1&quot; -FilePath &quot;%(SignMsi.FullPath)&quot;" />
+  </Target>
   <PropertyGroup>
     <PreBuildEvent>setlocal enabledelayedexpansion
 

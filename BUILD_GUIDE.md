@@ -1,49 +1,57 @@
 # Topin Secure Browser - Build Guide
 
+How to build the TSB application, MSI installers, and EXE bundle. For code signing, see [SIGNING.md](SIGNING.md).
+
 ## Prerequisites
-- Visual Studio 2022 with .NET Framework 4.8
-- WiX Toolset v3.14 installed
+
 - Windows 10/11 x64
+- Visual Studio 2022 (or Build Tools 2022) with the .NET Framework 4.8 targeting pack
+- WiX Toolset v3.14
+- PowerShell 5.1+
 
-**Note**: The project requires .NET Framework 4.8 due to NuGet package dependencies. While older systems may have .NET 4.7.x, .NET 4.8 is widely available and provides better compatibility.
+The `scripts/setup-environment.ps1` helper can install MSBuild/WiX/.NET if they are missing.
 
-## Quick Build Commands
+## Build (recommended: build script)
 
-### 1. Build Release Application for x64 (Replace x64 with x86 for such platforms)
+The build is driven by `scripts/build-application.ps1`, which restores packages, builds the
+solution, then builds the MSI installers and the EXE bundle for each platform.
+
 ```powershell
-& "C:\Program Files\Microsoft Visual Studio\2022\Professional\MSBuild\Current\Bin\MSBuild.exe" SafeExamBrowser.sln /p:Configuration=Release /p:Platform=x64
+# Both platforms, unsigned
+.\scripts\build-application.ps1 -Configuration Release -Platforms x64,x86 -SkipTests -Local
 ```
 
-### 2. Build MSI Installer
+To produce signed output, add the signing parameters described in [SIGNING.md](SIGNING.md).
+
+> Notes
+> - The build runs serially (MSBuild `/m` is intentionally disabled): some projects copy
+>   files into other projects' output folders via `robocopy` in their post-build events,
+>   which deadlocks/locks under a parallel build.
+> - `$(SolutionDir)` is passed with a doubled trailing backslash so the WiX `heat` harvest
+>   commands in `Setup/Setup.wixproj` receive a valid path.
+
+## Output locations
+
+| Artifact | Path |
+|---|---|
+| Standalone app | `SafeExamBrowser.Runtime\bin\<platform>\Release\SafeExamBrowser.exe` |
+| MSI installer | `Setup\bin\<platform>\Release\TSB.msi` |
+| EXE bundle | `SetupBundle\bin\<platform>\Release\TSB.exe` |
+
+`<platform>` is `x64` or `x86`. The `TSB.exe` bundle is the primary deliverable: it chains
+both the x64 and x86 MSIs and bootstraps the .NET Framework 4.8 and WebView2 prerequisites.
+
+## Collect artifacts (optional)
+
 ```powershell
-$env:WIX = "C:\Program Files (x86)\WiX Toolset v3.14\"
-& "C:\Program Files\Microsoft Visual Studio\2022\Professional\MSBuild\Current\Bin\MSBuild.exe" SafeExamBrowser.sln /p:Configuration=Release /p:Platform=x64 /t:Setup
+.\scripts\collect-artifacts.ps1 -Configuration Release -Platforms x64,x86 -Local
 ```
 
-### 3. Build EXE Bundle
+This gathers everything into `artifacts\deploy\` (`TSB.exe`, `TSB.msi`, `TSB-x86.exe`,
+`TSB-x86.msi`, the standalone app, and `build-info.json`).
+
+## Silent installation
+
 ```powershell
- & "C:\Program Files\Microsoft Visual Studio\2022\Professional\MSBuild\Current\Bin\MSBuild.exe" `
-SetupBundle\SetupBundle.wixproj /p:Configuration=Release /p:Platform=x64 `
-/p:SolutionDir="C:\Users\krish\Desktop\git-repos\seb-win-refactoring\"
-```
-
-## Output Locations
-- **Application**: `SafeExamBrowser.Runtime\bin\x64\Release\SafeExamBrowser.exe`
-- **MSI Installer**: `Setup\bin\x64\Release\TSB.msi`
-- **EXE Bundle**: `SetupBundle\bin\x64\Release\TSB.exe`
-
-## Key Modifications Made
-- ✅ Anti-rebranding restrictions bypassed (To avoid Black screen issue)
-- ✅ Code signing disabled (re-enable with your certificate)
-- ✅ x64 and x86 platforms configured
-- ✅ Configuration and Reset tools removed from installer
-
-## Code Signing (Optional)
-```powershell
-signtool sign /f "YourCertificate.pfx" /p "password" /t http://timestamp.digicert.com "Setup.msi"
-```
-
-## Silent Installation
-```powershell
-msiexec /i Setup.msi /quiet
+msiexec /i TSB.msi /quiet
 ```

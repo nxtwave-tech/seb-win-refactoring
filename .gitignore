@@ -10,6 +10,8 @@
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
+/tsb_logos/*
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
@@ -259,3 +261,13 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+
+*.pem
+
+# Code signing material (certs/keys must never be committed)
+/signing/
+
+# Generated build metadata
+build-info.json
+artifact-info.json
+deployment-manifest.json

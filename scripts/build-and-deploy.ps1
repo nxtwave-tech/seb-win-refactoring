@@ -13,6 +13,14 @@ param(
     [switch]$SkipUpload = $false,
     [switch]$DryRun = $false,
     [switch]$Local = $false,
+    [switch]$Sign = $false,
+    [string]$KmsRegion = "",
+    [string]$KmsKeyId = "",
+    [string]$CertFile = "",
+    [string]$TimestampUrl = "http://timestamp.digicert.com",
+    [string]$SignDescription = "Topin Secure Browser",
+    [string]$JsignPath = "jsign",
+    [string]$AwsCredentials = "",
     [switch]$Help = $false
 )
 
@@ -36,6 +44,14 @@ OPTIONS:
     -SkipUpload                 Skip S3 upload
     -DryRun                     Perform dry run (no actual upload)
     -Local                      Force local development mode
+    -Sign                       Authenticode sign the MSI/EXE outputs via jsign + AWS KMS
+    -KmsRegion <string>         AWS region holding the KMS key (required with -Sign)
+    -KmsKeyId <string>          KMS key id or alias, e.g. alias/nw-ev-code-signing (required with -Sign)
+    -CertFile <string>          Path to the certificate chain (.pem/.p7b/.cer) (required with -Sign)
+    -TimestampUrl <string>      RFC 3161 timestamp server URL (Default: http://timestamp.digicert.com)
+    -SignDescription <string>   Description embedded in the signature (Default: Topin Secure Browser)
+    -JsignPath <string>         'jsign' on PATH or path to jsign.jar (Default: jsign)
+    -AwsCredentials <string>    Optional "accessKey|secretKey|sessionToken" (else uses AWS default chain)
     -Help                       Show this help message
 
 EXAMPLES:
@@ -172,6 +188,16 @@ if ($PipelineSuccess) {
     }
     if ($SkipTests) { $buildArgs.SkipTests = $true }
     if ($Local) { $buildArgs.Local = $true }
+    if ($Sign) {
+        $buildArgs.Sign = $true
+        $buildArgs.KmsRegion = $KmsRegion
+        $buildArgs.KmsKeyId = $KmsKeyId
+        $buildArgs.CertFile = $CertFile
+        $buildArgs.TimestampUrl = $TimestampUrl
+        $buildArgs.SignDescription = $SignDescription
+        $buildArgs.JsignPath = $JsignPath
+        if ($AwsCredentials) { $buildArgs.AwsCredentials = $AwsCredentials }
+    }
     
     $PipelineSuccess = Invoke-PipelineStep "Build Application" "build-application.ps1" $buildArgs $SkipBuild
 }

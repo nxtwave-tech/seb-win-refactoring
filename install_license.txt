@@ -1,0 +1,29 @@
+Topin Secure Browser for Windows
+Copyright © 2010-2025 ETH Zürich, IT Services. Modifications © 2025 NxtWave.
+This application is subject to the terms of the Mozilla Public License, version 2.0. If a copy of the MPL was not distributed with this application, you can obtain one at http://mozilla.org/MPL/2.0/.
+See https://github.com/SafeExamBrowser for more information about Topin Secure Browser.
+
+Frameworks & Third-Party Software
+This application uses the following frameworks and third-party libraries:
+.NET Framework
+Copyright © 2002-2025 Microsoft. All rights reserved. See https://dotnet.microsoft.com/ for more information.
+Bouncy Castle
+Copyright © 2000-2025 Legion of the Bouncy Castle Inc. All rights reserved. See https://www.bouncycastle.org/ for more information.
+CefSharp (.NET bindings for the Chromium Embedded Framework)
+Copyright © 2010-2025 The CefSharp Authors. All rights reserved. See https://github.com/cefsharp/cefsharp for more information.
+CEF (Chromium Embedded Framework)
+Copyright © 2008-2025 The Chromium Embedded Framework Authors. All rights reserved. See https://bitbucket.org/chromiumembedded/cef/wiki/Home for more information.
+Font-Awesome-WPF
+Copyright © 2014-2025 charri. All rights reserved. See https://github.com/charri/Font-Awesome-WPF/ for more information.
+KGy SOFT Core & Drawing Libraries
+Copyright © 2005-2025 KGy SOFT. All rights reserved. See https://kgysoft.net/ for more information.
+KnownFolders
+Copyright © 2017-2025 Syroot. All rights reserved. See https://gitlab.com/Syroot/KnownFolders for more information.
+Microsoft.Windows.SDK.Contracts
+Copyright © 2019-2025 Microsoft. All rights reserved. See https://www.nuget.org/packages/Microsoft.Windows.SDK.Contracts for more information.
+NAudio
+Copyright © 2008-2025 Mark Heath & contributors. All rights reserved. See https://github.com/naudio/NAudio for more information.
+Newtonsoft.Json
+Copyright © 2007-2025 James Newton-King. All rights reserved. See https://www.newtonsoft.com/json for more information.
+Visual C++ Redistributable
+Copyright © 1993-2025 Microsoft. All rights reserved.

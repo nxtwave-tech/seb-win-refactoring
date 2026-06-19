@@ -80,15 +80,18 @@
 	</Target>
 	-->
   <PropertyGroup>
-    <SignOutput>false</SignOutput>
+    <SignOutput Condition=" '$(SignOutput)' == '' ">false</SignOutput>
   </PropertyGroup>
-  <!-- Signing disabled for custom builds -->
-  <!--<Target Name="SignBundleEngine">
-    <Exec Command="signtool sign /sha1 ecac9df025f5d208f6190fc4d6f9d329576598c7 /sm /tr http://timestamp.digicert.com /td sha256 /fd sha256 &quot;@(SignBundleEngine)&quot;" />
+  <!-- Signing is delegated to scripts/sign-file.ps1 (jsign + AWS KMS). Set SignOutput=true
+       to enable; signing configuration comes from the TSB_SIGN_* environment variables.
+       WiX detaches the burn engine, calls SignBundleEngine, reattaches it, then calls
+       SignBundle on the final bundle. -->
+  <Target Name="SignBundleEngine">
+    <Exec Command="powershell -NoProfile -ExecutionPolicy Bypass -File &quot;$(SolutionDir)scripts\sign-file.ps1&quot; -FilePath &quot;%(SignBundleEngine.FullPath)&quot;" />
   </Target>
   <Target Name="SignBundle">
-    <Exec Command="signtool sign /sha1 ecac9df025f5d208f6190fc4d6f9d329576598c7 /sm /tr http://timestamp.digicert.com /td sha256 /fd sha256 &quot;@(SignBundle)&quot;" />
-  </Target>-->
+    <Exec Command="powershell -NoProfile -ExecutionPolicy Bypass -File &quot;$(SolutionDir)scripts\sign-file.ps1&quot; -FilePath &quot;%(SignBundle.FullPath)&quot;" />
+  </Target>
   <PropertyGroup>
     <PreBuildEvent>IF NOT EXIST "C:\Temp" (
     mkdir "C:\Temp"

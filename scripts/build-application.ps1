@@ -5,8 +5,26 @@ param(
     [string]$Configuration = "Release",
     [string[]]$Platforms = @("x64", "x86"),
     [switch]$SkipTests = $false,
-    [switch]$Local = $false
+    [switch]$Local = $false,
+    [switch]$Sign = $false,
+    [string]$KmsRegion = "ap-south-1",
+    [string]$KmsKeyId = "5d263f99-4bc4-44be-a52f-0ba4757828de",
+    [string]$CertFile = "C:\Users\krish\Desktop\git-repos\seb-win-refactoring\signing\nw-ev-code-signing-cert.pem",
+    [string]$TimestampUrl = "http://timestamp.globalsign.com/tsa/r6advanced1",
+    [string]$SignDescription = "Topin Secure Browser",
+    [string]$JsignPath = "jsign",
+    [string]$AwsCredentials = ""
 )
+
+# Validate signing configuration early. Signing uses an AWS KMS-held key via jsign
+# (AWS KMS has no native Windows signing provider), so we need the region, key id/alias
+# and the certificate chain file rather than a local certificate thumbprint.
+if ($Sign) {
+    if (-not $KmsRegion) { throw "Signing was requested (-Sign) but -KmsRegion was not provided (e.g. us-east-1)." }
+    if (-not $KmsKeyId)  { throw "Signing was requested (-Sign) but -KmsKeyId was not provided (KMS key id or alias)." }
+    if (-not $CertFile)  { throw "Signing was requested (-Sign) but -CertFile was not provided (certificate chain .pem/.p7b)." }
+    if (-not (Test-Path $CertFile)) { throw "Signing certificate chain file not found: $CertFile" }
+}
 
 Write-Host "=== TSB Application Build ===" -ForegroundColor Green
 
@@ -67,8 +85,25 @@ Write-Host "Solution: $SolutionFile" -ForegroundColor Cyan
 Write-Host "MSBuild: $MSBuildPath" -ForegroundColor Cyan
 Write-Host "WiX: $WixPath" -ForegroundColor Cyan
 
-# Set WiX environment variable for MSBuild
+# Set WiX environment variable for MSBuild (must end with a trailing backslash, as the
+# wixproj files reference tooling via "$(WIX)bin\heat.exe")
+if (-not $WixPath.EndsWith('\')) { $WixPath += '\' }
 $env:WIX = $WixPath
+
+# When signing is enabled, export configuration for scripts/sign-file.ps1, which the WiX
+# signing targets invoke. The MSBuild process (and its child Exec/PowerShell processes)
+# inherit these environment variables from this session.
+if ($Sign) {
+    $env:TSB_SIGN_KMS_REGION = $KmsRegion
+    $env:TSB_SIGN_KMS_KEYID  = $KmsKeyId
+    $env:TSB_SIGN_CERTFILE   = (Resolve-Path $CertFile).Path
+    $env:TSB_SIGN_TSAURL     = $TimestampUrl
+    $env:TSB_SIGN_DESC       = $SignDescription
+    $env:TSB_SIGN_JSIGN      = $JsignPath
+    if ($AwsCredentials) { $env:TSB_SIGN_AWS_CREDS = $AwsCredentials }
+
+    Write-Host "Signing enabled (AWS KMS via jsign): region=$KmsRegion key=$KmsKeyId cert=$($env:TSB_SIGN_CERTFILE)" -ForegroundColor Cyan
+}
 
 # Function to run MSBuild with proper error handling
 function Invoke-MSBuild($project, $platform, $target = $null) {
@@ -76,14 +111,27 @@ function Invoke-MSBuild($project, $platform, $target = $null) {
         "`"$project`"",
         "/p:Configuration=$Configuration",
         "/p:Platform=$platform",
-        "/p:SolutionDir=`"$SolutionDir\`"",
-        "/m",  # Multi-processor build
+        # Double the trailing backslash so the closing quote is not parsed as an escaped
+        # quote (otherwise SolutionDir absorbs the following switches and corrupts the
+        # Setup project's PreBuildEvent heat/dir commands).
+        "/p:SolutionDir=`"$SolutionDir\\`"",
+        # NOTE: Parallel build (/m) is intentionally NOT used. Several projects copy files
+        # into other projects' output folders from their PostBuildEvents via robocopy (with
+        # the default 1,000,000-retry behavior). Under a parallel build those copies race
+        # against concurrent compilation of the destination project, locking files and
+        # hanging the build. Building serially matches Visual Studio's ordered behavior.
         "/v:m", # Minimal verbosity
         "/nologo"
     )
     
     if ($target) {
         $args += "/t:$target"
+    }
+    
+    if ($Sign) {
+        # Enable the WiX signing targets; signing configuration is read from the
+        # TSB_SIGN_* environment variables by scripts/sign-file.ps1.
+        $args += "/p:SignOutput=true"
     }
     
     Write-Host "Running: MSBuild $($args -join ' ')" -ForegroundColor Gray
@@ -99,8 +147,10 @@ function Invoke-MSBuild($project, $platform, $target = $null) {
 Write-Host "`n1. Restoring NuGet packages..." -ForegroundColor Yellow
 
 try {
-    # Try using MSBuild restore first (preferred)
-    Invoke-MSBuild $SolutionFile "AnyCPU" "Restore"
+    # Try using MSBuild restore first (preferred). Use a concrete platform from the
+    # solution (the solution does not define an "AnyCPU" configuration); this also ensures
+    # PackageReference projects resolve their RuntimeIdentifiers during restore.
+    Invoke-MSBuild $SolutionFile $Platforms[0] "Restore"
     Write-Host "NuGet packages restored successfully" -ForegroundColor Green
 } catch {
     Write-Host "MSBuild restore failed, trying NuGet CLI..." -ForegroundColor Yellow

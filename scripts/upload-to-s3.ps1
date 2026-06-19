@@ -365,3 +365,4 @@ if (-not $DryRun) {
 exit $(if ($successCount -eq $totalCount) { 0 } else { 1 })
 
 
+

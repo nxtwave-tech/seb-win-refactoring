@@ -279,3 +279,4 @@ $artifactInfo | ConvertTo-Json -Depth 3 | Out-File -FilePath $artifactInfoPath -
 Write-Host "Artifact information saved to: $artifactInfoPath" -ForegroundColor Cyan
 
 
+
