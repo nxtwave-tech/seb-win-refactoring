@@ -287,7 +287,7 @@ namespace SafeExamBrowser.Browser
 				launchId = $"{timestamp}_{shortId}";
 			}
 
-			return $"topin_{current.Environment}/tsb_logs/{current.OrgAssessmentId}/{current.UserId}/{launchId}/";
+			return $"topin_{current.Environment}/media/tsb_logs/{current.OrgAssessmentId}/{current.UserId}/{launchId}/";
 		}
 
 		private IEnumerable<KeyValuePair<string, string>> GetLogFiles()
