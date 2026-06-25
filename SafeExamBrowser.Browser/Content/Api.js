@@ -26,7 +26,13 @@ TopinSecureBrowser = {
             }
         },
         // TEMPORARY DEBUG: native calls _debug() to surface S3 log-upload steps/errors on-page (dev tools are blocked)
+        // Toggle this flag to re-enable the on-page debug overlay. Kept disabled by default.
+        _debugEnabled: false,
         _debug: function (message) {
+            if (!this._debugEnabled) {
+                return;
+            }
+
             try {
                 var panel = document.getElementById('__tsb_log_debug__');
 
