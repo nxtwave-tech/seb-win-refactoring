@@ -56,6 +56,7 @@ namespace SafeExamBrowser.Browser
 		private readonly IEnumerable<Integration> integrations;
 		private readonly IKeyGenerator keyGenerator;
 		private readonly IModuleLogger logger;
+		private readonly LogUploader logUploader;
 		private readonly IMessageBox messageBox;
 		private readonly SessionMode sessionMode;
 		private readonly Dictionary<int, BrowserWindow> popups;
@@ -103,6 +104,7 @@ namespace SafeExamBrowser.Browser
 			bool isMainWindow,
 			IKeyGenerator keyGenerator,
 			IModuleLogger logger,
+			LogUploader logUploader,
 			IMessageBox messageBox,
 			SessionMode sessionMode,
 			BrowserSettings settings,
@@ -120,6 +122,7 @@ namespace SafeExamBrowser.Browser
 			this.IsMainWindow = isMainWindow;
 			this.keyGenerator = keyGenerator;
 			this.logger = logger;
+			this.logUploader = logUploader;
 			this.messageBox = messageBox;
 			this.popups = new Dictionary<int, BrowserWindow>();
 			this.sessionMode = sessionMode;
@@ -206,6 +209,7 @@ namespace SafeExamBrowser.Browser
 
 			Control = new BrowserControl(
 				clipboard,
+				logUploader,
 				cefSharpControl,
 				contextMenuHandler,
 				dialogHandler,

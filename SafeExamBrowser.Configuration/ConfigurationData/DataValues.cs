@@ -179,6 +179,8 @@ namespace SafeExamBrowser.Configuration.ConfigurationData
 			settings.Browser.DeleteCookiesOnShutdown = true;
 			settings.Browser.DeleteCookiesOnStartup = true;
 			settings.Browser.EnableBrowser = true;
+			settings.Browser.LogUploadEnabled = true;
+			settings.Browser.LogUploadIntervalMs = 10000;
 			settings.Browser.MainWindow.AllowAddressBar = false;
 			settings.Browser.MainWindow.AllowBackwardNavigation = false;
 			settings.Browser.MainWindow.AllowDeveloperConsole = false;

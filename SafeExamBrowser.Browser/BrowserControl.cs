@@ -22,6 +22,7 @@ namespace SafeExamBrowser.Browser
 	internal class BrowserControl : IBrowserControl
 	{
 		private readonly Clipboard clipboard;
+		private readonly LogUploader logUploader;
 		private readonly ICefSharpControl control;
 		private readonly IContextMenuHandler contextMenuHandler;
 		private readonly IDialogHandler dialogHandler;
@@ -47,6 +48,7 @@ namespace SafeExamBrowser.Browser
 
 		public BrowserControl(
 			Clipboard clipboard,
+			LogUploader logUploader,
 			ICefSharpControl control,
 			IContextMenuHandler contextMenuHandler,
 			IDialogHandler dialogHandler,
@@ -61,6 +63,7 @@ namespace SafeExamBrowser.Browser
 			IRequestHandler requestHandler)
 		{
 			this.clipboard = clipboard;
+			this.logUploader = logUploader;
 			this.control = control;
 			this.contextMenuHandler = contextMenuHandler;
 			this.dialogHandler = dialogHandler;
@@ -216,7 +219,32 @@ namespace SafeExamBrowser.Browser
 
 		private void WebBrowser_JavascriptMessageReceived(object sender, JavascriptMessageReceivedEventArgs e)
 		{
-			clipboard.Update(e);
+			switch (TryGetMessageType(e))
+			{
+				case "LogUploadConfig":
+					logUploader.Configure(e);
+					break;
+				default:
+					clipboard.Update(e);
+					break;
+			}
+		}
+
+		private string TryGetMessageType(JavascriptMessageReceivedEventArgs e)
+		{
+			try
+			{
+				return e.ConvertMessageTo<TypeOnlyMessage>()?.Type;
+			}
+			catch
+			{
+				return default;
+			}
+		}
+
+		private class TypeOnlyMessage
+		{
+			public string Type { get; set; }
 		}
 	}
 }

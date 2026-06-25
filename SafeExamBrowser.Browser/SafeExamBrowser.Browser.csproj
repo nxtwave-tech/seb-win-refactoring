@@ -53,6 +53,12 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AWSSDK.Core">
+      <HintPath>..\packages\AWSSDK.Core.3.7.501.1\lib\net45\AWSSDK.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="AWSSDK.S3">
+      <HintPath>..\packages\AWSSDK.S3.3.7.511.8\lib\net45\AWSSDK.S3.dll</HintPath>
+    </Reference>
     <Reference Include="CefSharp, Version=139.0.280.0, Culture=neutral, PublicKeyToken=40c4b6fc221f4138, processorArchitecture=MSIL">
       <HintPath>..\packages\CefSharp.Common.139.0.280\lib\net462\CefSharp.dll</HintPath>
     </Reference>
@@ -81,6 +87,7 @@
     <Compile Include="BrowserApplication.cs" />
     <Compile Include="BrowserWindow.cs" />
     <Compile Include="Clipboard.cs" />
+    <Compile Include="LogUploader.cs" />
     <Compile Include="Events\ClipboardChangedEventHandler.cs" />
     <Compile Include="Events\DialogRequestedEventArgs.cs" />
     <Compile Include="Events\DialogRequestedEventHandler.cs" />

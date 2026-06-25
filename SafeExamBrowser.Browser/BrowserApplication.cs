@@ -45,6 +45,7 @@ namespace SafeExamBrowser.Browser
 		private readonly IHashAlgorithm hashAlgorithm;
 		private readonly IKeyGenerator keyGenerator;
 		private readonly IModuleLogger logger;
+		private readonly LogUploader logUploader;
 		private readonly IMessageBox messageBox;
 		private readonly INativeMethods nativeMethods;
 		private readonly SessionMode sessionMode;
@@ -52,6 +53,8 @@ namespace SafeExamBrowser.Browser
 		private readonly IText text;
 		private readonly IUserInterfaceFactory uiFactory;
 		private readonly List<BrowserWindow> windows;
+
+		private System.Timers.Timer logUploadTimer;
 
 		public bool AutoStart { get; private set; }
 		public IconResource Icon { get; private set; }
@@ -80,6 +83,7 @@ namespace SafeExamBrowser.Browser
 		{
 			this.appConfig = appConfig;
 			this.clipboard = new Clipboard(logger.CloneFor(nameof(Clipboard)), settings);
+			this.logUploader = new LogUploader(appConfig, logger.CloneFor(nameof(LogUploader)), settings);
 			this.fileSystemDialog = fileSystemDialog;
 			this.hashAlgorithm = hashAlgorithm;
 			this.keyGenerator = keyGenerator;
@@ -91,6 +95,9 @@ namespace SafeExamBrowser.Browser
 			this.text = text;
 			this.uiFactory = uiFactory;
 			this.windows = new List<BrowserWindow>();
+
+			this.logUploader.CredentialsRequired += LogUploader_CredentialsRequired;
+			this.logUploader.DebugMessage += LogUploader_DebugMessage;
 		}
 
 		public void Focus(bool forward)
@@ -133,11 +140,14 @@ namespace SafeExamBrowser.Browser
 		public void Start()
 		{
 			CreateNewWindow();
+			StartLogUpload();
 		}
 
 		public void Terminate()
 		{
 			logger.Info("Initiating termination...");
+
+			StopLogUpload();
 
 			AwaitReady();
 
@@ -166,6 +176,51 @@ namespace SafeExamBrowser.Browser
 			Thread.Sleep(500);
 		}
 
+		private void StartLogUpload()
+		{
+			if (!settings.LogUploadEnabled)
+			{
+				logger.Info("Log upload is disabled.");
+				return;
+			}
+
+			var interval = settings.LogUploadIntervalMs > 0 ? settings.LogUploadIntervalMs : 10000;
+
+			logUploadTimer = new System.Timers.Timer(interval) { AutoReset = true };
+			logUploadTimer.Elapsed += (o, e) => logUploader.Tick();
+			logUploadTimer.Start();
+
+			logger.Info($"Started log upload timer with an interval of {interval} ms.");
+		}
+
+		private void StopLogUpload()
+		{
+			if (logUploadTimer != default)
+			{
+				logUploadTimer.Stop();
+				logUploadTimer.Dispose();
+				logUploadTimer = default;
+			}
+
+			if (settings.LogUploadEnabled)
+			{
+				logger.Info("Performing final log upload before termination...");
+				logUploader.Flush();
+			}
+		}
+
+		private void LogUploader_CredentialsRequired()
+		{
+			windows.FirstOrDefault(w => w.IsMainWindow)?.Control.ExecuteJavaScript("TopinSecureBrowser.log._requestCredentials();");
+		}
+
+		private void LogUploader_DebugMessage(string message)
+		{
+			var encoded = Newtonsoft.Json.JsonConvert.SerializeObject(message);
+
+			windows.FirstOrDefault(w => w.IsMainWindow)?.Control.ExecuteJavaScript($"TopinSecureBrowser.log._debug({encoded});");
+		}
+
 		private void CreateNewWindow(PopupRequestedEventArgs args = default)
 		{
 			var id = ++windowIdCounter;
@@ -188,6 +243,7 @@ namespace SafeExamBrowser.Browser
 				isMainWindow,
 				keyGenerator,
 				windowLogger,
+				logUploader,
 				messageBox,
 				sessionMode,
 				settings,

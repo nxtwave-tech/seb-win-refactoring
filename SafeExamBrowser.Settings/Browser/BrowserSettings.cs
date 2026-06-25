@@ -149,6 +149,16 @@ namespace SafeExamBrowser.Settings.Browser
 		public string HomeUrl { get; set; }
 
 		/// <summary>
+		/// Determines whether the browser application uploads its session log files to S3 using credentials provided by the website.
+		/// </summary>
+		public bool LogUploadEnabled { get; set; }
+
+		/// <summary>
+		/// The interval (in milliseconds) at which the browser application uploads its session log files to S3.
+		/// </summary>
+		public int LogUploadIntervalMs { get; set; }
+
+		/// <summary>
 		/// The settings to be used for the main browser window.
 		/// </summary>
 		public WindowSettings MainWindow { get; set; }
