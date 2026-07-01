@@ -78,6 +78,50 @@ Get-AuthenticodeSignature .\SetupBundle\bin\x86\Release\TSB.exe | Format-List St
 All should report `Status : Valid`. (`signtool verify /pa /v <file>` works too if the Windows
 SDK signing tools are installed.)
 
+## Publish the signed installer to S3
+
+Once the signed bundles are produced, upload them with `scripts/upload-signed-to-s3.ps1`. The script
+re-verifies the Authenticode signature of each platform bundle (so an unsigned binary can never be
+published), then uploads to a clean, versioned layout. The S3 credentials are separate from the KMS
+signing credentials and are passed in as parameters (never committed).
+
+```powershell
+# Uploads both x64 and x86 by default
+.\scripts\upload-signed-to-s3.ps1 `
+  -AccessKey "AKIA..." -SecretKey "..." `
+  -Bucket topin-secure-browser -Channel beta -Region ap-south-1
+```
+
+This produces the following objects in the bucket:
+
+| Object | Purpose |
+|---|---|
+| `beta/windows/tsb.exe` | Rolling "latest" pointer for x64 (stable download URL, `no-cache`) |
+| `beta/windows/tsb_x86.exe` | Rolling "latest" pointer for x86 (`no-cache`) |
+| `beta/windows/tsb_latest.json` | Latest metadata for all platforms: version, commit, SHA-256, size, timestamp |
+| `beta/windows/<version>/tsb.exe` | Immutable versioned x64 archive (long-cache) |
+| `beta/windows/<version>/tsb_x86.exe` | Immutable versioned x86 archive (long-cache) |
+
+`<version>` is read from each EXE's product version. The primary (x64) download URL stays
+`https://topin-secure-browser.s3.ap-south-1.amazonaws.com/beta/windows/tsb.exe`.
+
+### Upload parameters
+
+| Parameter | Required | Description |
+|---|---|---|
+| `-AccessKey` / `-SecretKey` | yes | AWS credentials with `s3:PutObject` on the bucket |
+| `-SessionToken` | no | Only for temporary STS credentials |
+| `-Bucket` | no | Target bucket (default `topin-secure-browser`) |
+| `-Channel` | no | Release channel / prefix (default `beta`) |
+| `-Region` | no | Bucket region (default `ap-south-1`) |
+| `-Platforms` | no | Platforms to upload (default `x64, x86`); x64 -> `tsb.exe`, x86 -> `tsb_x86.exe` |
+| `-Configuration` | no | Build configuration (default `Release`) |
+| `-SkipSignatureCheck` | no | Upload even if the signature is not `Valid` (not recommended) |
+| `-DryRun` | no | Print what would be uploaded without uploading |
+
+Run a `-DryRun` first to confirm the resolved versions and S3 keys before publishing. To publish a
+single platform, pass e.g. `-Platforms x64`.
+
 ## Implementation notes / gotchas
 
 - **Credentials with `|`**: jsign's AWS store type only accepts credentials via `--storepass`
