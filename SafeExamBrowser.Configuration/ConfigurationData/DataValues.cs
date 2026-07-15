@@ -161,11 +161,13 @@ namespace SafeExamBrowser.Configuration.ConfigurationData
 			settings.Browser.AdditionalWindow.FullScreenMode = false;
 			settings.Browser.AdditionalWindow.Position = WindowPosition.Right;
 			settings.Browser.AdditionalWindow.RelativeHeight = 100;
-			settings.Browser.AdditionalWindow.RelativeWidth = 50;
+			settings.Browser.AdditionalWindow.AbsoluteWidth = 1000;
 			settings.Browser.AdditionalWindow.ShowHomeButton = false;
+			settings.Browser.AdditionalWindow.ShowReloadButton = true;
 			settings.Browser.AdditionalWindow.ShowReloadWarning = false;
-			settings.Browser.AdditionalWindow.ShowToolbar = false;
+			settings.Browser.AdditionalWindow.ShowToolbar = true;
 			settings.Browser.AdditionalWindow.UrlPolicy = UrlPolicy.Never;
+			settings.Browser.AllowAudioCapture = true;
 			settings.Browser.AllowConfigurationDownloads = true;
 			settings.Browser.AllowCustomDownAndUploadLocation = false;
 			settings.Browser.AllowDownloads = true;
@@ -174,7 +176,9 @@ namespace SafeExamBrowser.Configuration.ConfigurationData
 			settings.Browser.AllowPdfReader = true;
 			settings.Browser.AllowPdfReaderToolbar = false;
 			settings.Browser.AllowPrint = false;
+			settings.Browser.AllowScreenCapture = true;
 			settings.Browser.AllowUploads = false;
+			settings.Browser.AllowVideoCapture = true;
 			settings.Browser.DeleteCacheOnShutdown = true;
 			settings.Browser.DeleteCookiesOnShutdown = true;
 			settings.Browser.DeleteCookiesOnStartup = true;
@@ -190,56 +194,61 @@ namespace SafeExamBrowser.Configuration.ConfigurationData
 			settings.Browser.MainWindow.RelativeHeight = 100;
 			settings.Browser.MainWindow.RelativeWidth = 100;
 			settings.Browser.MainWindow.ShowHomeButton = false;
+			settings.Browser.MainWindow.ShowReloadButton = true;
 			settings.Browser.MainWindow.ShowReloadWarning = true;
-			settings.Browser.MainWindow.ShowToolbar = false;
+			settings.Browser.MainWindow.ShowToolbar = true;
 			settings.Browser.MainWindow.UrlPolicy = UrlPolicy.Never;
 			settings.Browser.PopupPolicy = PopupPolicy.Allow;
 			settings.Browser.Proxy.Policy = ProxyPolicy.System;
 			settings.Browser.ResetOnQuitUrl = false;
 			settings.Browser.SendBrowserExamKey = false;
-			settings.Browser.SendConfigurationKey = false;
+			settings.Browser.SendConfigurationKey = true;
 			settings.Browser.ShowFileSystemElementPath = true;
 			settings.Browser.StartUrl = "https://topin-assessment-portal-beta.earlywave.in/seb-acknowledgement";
 			settings.Browser.UseCustomUserAgent = false;
-			settings.Browser.UseIsolatedClipboard = true;
+			settings.Browser.UseIsolatedClipboard = false;
 			settings.Browser.UseQueryParameter = false;
 			settings.Browser.UseTemporaryDownAndUploadDirectory = false;
 			settings.Browser.LoginToken = null; // Will be populated from URL handler if present
 
+			settings.Audio.InitializeVolume = false;
+			settings.Audio.InitialVolume = 25;
+			settings.Audio.MuteAudio = false;
+
 			settings.ConfigurationMode = ConfigurationMode.Exam;
 
-			settings.Display.AllowedDisplays = 2;
+			settings.Display.AllowedDisplays = 1;
 			settings.Display.AlwaysOn = true;
 			settings.Display.IgnoreError = false;
 			settings.Display.InternalDisplayOnly = false;
 
 			settings.Keyboard.AllowAltEsc = false;
 			settings.Keyboard.AllowAltF4 = false;
-			settings.Keyboard.AllowAltTab = true;
+			settings.Keyboard.AllowAltTab = false;
 			settings.Keyboard.AllowCtrlC = true;
 			settings.Keyboard.AllowCtrlEsc = false;
 			settings.Keyboard.AllowCtrlV = true;
 			settings.Keyboard.AllowCtrlX = true;
-			settings.Keyboard.AllowEsc = true;
-			settings.Keyboard.AllowF1 = true;
-			settings.Keyboard.AllowF2 = true;
-			settings.Keyboard.AllowF3 = true;
-			settings.Keyboard.AllowF4 = true;
-			settings.Keyboard.AllowF5 = true;
-			settings.Keyboard.AllowF6 = true;
-			settings.Keyboard.AllowF7 = true;
-			settings.Keyboard.AllowF8 = true;
-			settings.Keyboard.AllowF9 = true;
-			settings.Keyboard.AllowF10 = true;
-			settings.Keyboard.AllowF11 = true;
-			settings.Keyboard.AllowF12 = true;
+			settings.Keyboard.AllowEsc = false;
+			settings.Keyboard.AllowF1 = false;
+			settings.Keyboard.AllowF2 = false;
+			settings.Keyboard.AllowF3 = false;
+			settings.Keyboard.AllowF4 = false;
+			settings.Keyboard.AllowF5 = false;
+			settings.Keyboard.AllowF6 = false;
+			settings.Keyboard.AllowF7 = false;
+			settings.Keyboard.AllowF8 = false;
+			settings.Keyboard.AllowF9 = false;
+			settings.Keyboard.AllowF10 = false;
+			settings.Keyboard.AllowF11 = false;
+			settings.Keyboard.AllowF12 = false;
 			settings.Keyboard.AllowPrintScreen = false;
 			settings.Keyboard.AllowSystemKey = false;
 
 			settings.LogLevel = LogLevel.Debug;
 
 			settings.Mouse.AllowMiddleButton = false;
-			settings.Mouse.AllowRightButton = true;
+			settings.Mouse.AllowRightButton = false;
 
 			settings.PowerSupply.ChargeThresholdCritical = 0.1;
 			settings.PowerSupply.ChargeThresholdLow = 0.2;
@@ -261,8 +270,8 @@ namespace SafeExamBrowser.Configuration.ConfigurationData
 			settings.Security.AllowReconfiguration = false;
 			settings.Security.AllowStickyKeys = false;
 			settings.Security.AllowTermination = true;
-			settings.Security.AllowWindowCapture = false;
-			settings.Security.ClipboardPolicy = ClipboardPolicy.Isolated;
+			settings.Security.AllowWindowCapture = true;
+			settings.Security.ClipboardPolicy = ClipboardPolicy.Allow;
 			settings.Security.DisableSessionChangeLockScreen = false;
 			settings.Security.KioskMode = KioskMode.CreateNewDesktop;
 			settings.Security.VerifyCursorConfiguration = true;
@@ -283,14 +292,14 @@ namespace SafeExamBrowser.Configuration.ConfigurationData
 			settings.Service.DisableNetworkOptions = true;
 			settings.Service.DisablePasswordChange = true;
 			settings.Service.DisablePowerOptions = true;
-			settings.Service.DisableRemoteConnections = true;
+			settings.Service.DisableRemoteConnections = false;
 			settings.Service.DisableSignout = true;
 			settings.Service.DisableTaskManager = true;
 			settings.Service.DisableUserLock = true;
 			settings.Service.DisableUserSwitch = true;
 			settings.Service.DisableVmwareOverlay = true;
 			settings.Service.DisableWindowsUpdate = true;
-			settings.Service.IgnoreService = true;
+			settings.Service.IgnoreService = false;
 			settings.Service.Policy = ServicePolicy.Mandatory;
 			settings.Service.SetVmwareConfiguration = false;
 
@@ -298,20 +307,22 @@ namespace SafeExamBrowser.Configuration.ConfigurationData
 
 			settings.System.AlwaysOn = true;
 
-			settings.UserInterface.ActionCenter.EnableActionCenter = true;
+			settings.UserInterface.ActionCenter.EnableActionCenter = false;
 			settings.UserInterface.ActionCenter.ShowApplicationInfo = true;
 			settings.UserInterface.ActionCenter.ShowApplicationLog = false;
+			settings.UserInterface.ActionCenter.ShowAudio = true;
 			settings.UserInterface.ActionCenter.ShowClock = true;
-			settings.UserInterface.ActionCenter.ShowKeyboardLayout = true;
-			settings.UserInterface.ActionCenter.ShowNetwork = false;
+			settings.UserInterface.ActionCenter.ShowKeyboardLayout = false;
+			settings.UserInterface.ActionCenter.ShowNetwork = true;
 			settings.UserInterface.LockScreen.BackgroundColor = "#ff0000";
 			settings.UserInterface.Mode = UserInterfaceMode.Desktop;
 			settings.UserInterface.Taskbar.EnableTaskbar = true;
 			settings.UserInterface.Taskbar.ShowApplicationInfo = false;
 			settings.UserInterface.Taskbar.ShowApplicationLog = false;
+			settings.UserInterface.Taskbar.ShowAudio = true;
 			settings.UserInterface.Taskbar.ShowClock = true;
-			settings.UserInterface.Taskbar.ShowKeyboardLayout = true;
-			settings.UserInterface.Taskbar.ShowNetwork = false;
+			settings.UserInterface.Taskbar.ShowKeyboardLayout = false;
+			settings.UserInterface.Taskbar.ShowNetwork = true;
 
 			return settings;
 		}

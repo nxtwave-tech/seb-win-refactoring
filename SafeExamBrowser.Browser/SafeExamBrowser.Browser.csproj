@@ -117,6 +117,7 @@
     <Compile Include="Handlers\DragHandler.cs" />
     <Compile Include="Handlers\FocusHandler.cs" />
     <Compile Include="Handlers\KeyboardHandler.cs" />
+    <Compile Include="Handlers\PermissionHandler.cs" />
     <Compile Include="Handlers\RenderProcessMessageHandler.cs" />
     <Compile Include="Handlers\RequestHandler.cs" />
     <Compile Include="Handlers\ResourceHandler.cs" />
@@ -153,6 +154,7 @@
     <Compile Include="Wrapper\Events\JavaScriptDialogEventHandler.cs" />
     <Compile Include="Wrapper\Events\KeyEventHandler.cs" />
     <Compile Include="Wrapper\Events\LoadingProgressChangedEventHandler.cs" />
+    <Compile Include="Wrapper\Events\MediaAccessPermissionEventHandler.cs" />
     <Compile Include="Wrapper\Events\GenericEventArgs.cs" />
     <Compile Include="Wrapper\Events\OpenUrlFromTabEventHandler.cs" />
     <Compile Include="Wrapper\Events\PreKeyEventHandler.cs" />
@@ -173,6 +175,7 @@
     <Compile Include="Handlers\JavaScriptDialogHandler.cs" />
     <Compile Include="Wrapper\Handlers\JavaScriptDialogHandlerSwitch.cs" />
     <Compile Include="Wrapper\Handlers\KeyboardHandlerSwitch.cs" />
+    <Compile Include="Wrapper\Handlers\PermissionHandlerSwitch.cs" />
     <Compile Include="Wrapper\Handlers\RenderProcessMessageHandlerSwitch.cs" />
     <Compile Include="Wrapper\Handlers\RequestHandlerSwitch.cs" />
     <Compile Include="Wrapper\ICefSharpControl.cs" />

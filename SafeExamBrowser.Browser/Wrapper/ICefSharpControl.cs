@@ -40,6 +40,7 @@ namespace SafeExamBrowser.Browser.Wrapper
 		event JavaScriptDialogEventHandler JavaScriptDialog;
 		event KeyEventHandler KeyEvent;
 		event LoadingProgressChangedEventHandler LoadingProgressChanged;
+		event MediaAccessPermissionEventHandler RequestMediaAccessPermission;
 		event OpenUrlFromTabEventHandler OpenUrlFromTab;
 		event PreKeyEventHandler PreKeyEvent;
 		event ResetDialogStateEventHandler ResetDialogState;
@@ -75,6 +76,7 @@ namespace SafeExamBrowser.Browser.Wrapper
 		void OnLoadingProgressChange(IWebBrowser webBrowser, IBrowser browser, double progress);
 		void OnOpenUrlFromTab(IWebBrowser webBrowser, IBrowser browser, IFrame frame, string targetUrl, WindowOpenDisposition targetDisposition, bool userGesture, GenericEventArgs args);
 		void OnPreKeyEvent(IWebBrowser webBrowser, IBrowser browser, KeyType type, int windowsKeyCode, int nativeKeyCode, CefEventFlags modifiers, bool isSystemKey, ref bool isKeyboardShortcut, GenericEventArgs args);
+		void OnRequestMediaAccessPermission(IWebBrowser webBrowser, IBrowser browser, IFrame frame, string requestingOrigin, MediaAccessPermissionType requestedPermissions, IMediaAccessCallback callback, GenericEventArgs args);
 		void OnResetDialogState(IWebBrowser webBrowser, IBrowser browser);
 		void OnRunContextMenu(IWebBrowser chromiumWebBrowser, IBrowser browser, IFrame frame, IContextMenuParams parameters, IMenuModel model, IRunContextMenuCallback callback, GenericEventArgs args);
 		void OnSetFocus(IWebBrowser webBrowser, IBrowser browser, CefFocusSource source, GenericEventArgs args);

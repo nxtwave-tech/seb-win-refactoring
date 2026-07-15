@@ -18,6 +18,7 @@ using SafeExamBrowser.Settings.Applications;
 using SafeExamBrowser.SystemComponents.Contracts;
 using SafeExamBrowser.SystemComponents.Contracts.Audio;
 using SafeExamBrowser.SystemComponents.Contracts.Keyboard;
+using SafeExamBrowser.SystemComponents.Contracts.Microphone;
 using SafeExamBrowser.SystemComponents.Contracts.Network;
 using SafeExamBrowser.SystemComponents.Contracts.PowerSupply;
 using SafeExamBrowser.UserInterface.Contracts;
@@ -36,6 +37,7 @@ namespace SafeExamBrowser.Client.UnitTests.Operations
 		private Mock<INotification> aboutNotification;
 		private Mock<IKeyboard> keyboard;
 		private Mock<INotification> logNotification;
+		private Mock<IMicrophone> microphone;
 		private Mock<INativeMethods> nativeMethods;
 		private Mock<IPowerSupply> powerSupply;
 		private Mock<ISystemInfo> systemInfo;
@@ -57,6 +59,7 @@ namespace SafeExamBrowser.Client.UnitTests.Operations
 			aboutNotification = new Mock<INotification>();
 			keyboard = new Mock<IKeyboard>();
 			logNotification = new Mock<INotification>();
+			microphone = new Mock<IMicrophone>();
 			nativeMethods = new Mock<INativeMethods>();
 			networkAdapter = new Mock<INetworkAdapter>();
 			powerSupply = new Mock<IPowerSupply>();
@@ -80,6 +83,7 @@ namespace SafeExamBrowser.Client.UnitTests.Operations
 				keyboard.Object,
 				logger.Object,
 				logNotification.Object,
+				microphone.Object,
 				nativeMethods.Object,
 				networkAdapter.Object,
 				powerSupply.Object,

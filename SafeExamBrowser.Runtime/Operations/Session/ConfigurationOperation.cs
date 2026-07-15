@@ -217,7 +217,6 @@ namespace SafeExamBrowser.Runtime.Operations.Session
 			Context.Next.Settings.Display.InternalDisplayOnly = false;
 			Context.Next.Settings.Security.AllowReconfiguration = true;
 			Context.Next.Settings.Security.VirtualMachinePolicy = VirtualMachinePolicy.Allow;
-			Context.Next.Settings.Service.IgnoreService = true;
 			Context.Next.Settings.UserInterface.ActionCenter.EnableActionCenter = false;
 
 			Logger.Info($"The configuration resource needs authentication or is a webpage, using '{uri}' as start URL for the browser.");

@@ -22,6 +22,11 @@ namespace SafeExamBrowser.Settings.Browser
 		public WindowSettings AdditionalWindow { get; set; }
 
 		/// <summary>
+		/// Determines whether websites are allowed to capture the microphone via getUserMedia.
+		/// </summary>
+		public bool AllowAudioCapture { get; set; }
+
+		/// <summary>
 		/// Determines whether the user will be allowed to download configuration files.
 		/// </summary>
 		public bool AllowConfigurationDownloads { get; set; }
@@ -62,6 +67,11 @@ namespace SafeExamBrowser.Settings.Browser
 		public bool AllowPrint { get; set; }
 
 		/// <summary>
+		/// Determines whether websites are allowed to capture the screen via getDisplayMedia.
+		/// </summary>
+		public bool AllowScreenCapture { get; set; }
+
+		/// <summary>
 		/// Determines whether spell checking is enabled for input fields.
 		/// </summary>
 		public bool AllowSpellChecking { get; set; }
@@ -70,6 +80,11 @@ namespace SafeExamBrowser.Settings.Browser
 		/// Determines whether the user will be allowed to upload files.
 		/// </summary>
 		public bool AllowUploads { get; set; }
+
+		/// <summary>
+		/// Determines whether websites are allowed to capture the camera via getUserMedia.
+		/// </summary>
+		public bool AllowVideoCapture { get; set; }
 
 		/// <summary>
 		/// The salt value for the calculation of the browser exam key which is used for integrity checks with server applications (see also <see cref="SendBrowserExamKey"/>).

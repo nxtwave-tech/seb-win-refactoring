@@ -169,6 +169,8 @@ namespace SafeExamBrowser.Browser
 			var focusHandler = new FocusHandler();
 			var javaScriptDialogHandler = new JavaScriptDialogHandler();
 			var keyboardHandler = new KeyboardHandler();
+			var permissionLogger = logger.CloneFor($"{nameof(PermissionHandler)} #{Id}");
+			var permissionHandler = new PermissionHandler(permissionLogger, settings);
 			var renderHandler = new RenderProcessMessageHandler(appConfig, clipboard, keyGenerator, settings, text);
 			var requestFilter = new RequestFilter();
 			var requestLogger = logger.CloneFor($"{nameof(RequestHandler)} #{Id}");
@@ -220,6 +222,7 @@ namespace SafeExamBrowser.Browser
 				javaScriptDialogHandler,
 				keyboardHandler,
 				controlLogger,
+				permissionHandler,
 				renderHandler,
 				requestHandler);
 			Control.AddressChanged += Control_AddressChanged;

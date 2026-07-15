@@ -38,6 +38,7 @@ namespace SafeExamBrowser.Browser.Wrapper
 		public event JavaScriptDialogEventHandler JavaScriptDialog;
 		public event KeyEventHandler KeyEvent;
 		public event LoadingProgressChangedEventHandler LoadingProgressChanged;
+		public event MediaAccessPermissionEventHandler RequestMediaAccessPermission;
 		public event OpenUrlFromTabEventHandler OpenUrlFromTab;
 		public event PreKeyEventHandler PreKeyEvent;
 		public event ResetDialogStateEventHandler ResetDialogState;
@@ -185,6 +186,11 @@ namespace SafeExamBrowser.Browser.Wrapper
 		public void OnPreKeyEvent(IWebBrowser webBrowser, IBrowser browser, KeyType type, int windowsKeyCode, int nativeKeyCode, CefEventFlags modifiers, bool isSystemKey, ref bool isKeyboardShortcut, GenericEventArgs args)
 		{
 			PreKeyEvent?.Invoke(webBrowser, browser, type, windowsKeyCode, nativeKeyCode, modifiers, isSystemKey, ref isKeyboardShortcut, args);
+		}
+
+		public void OnRequestMediaAccessPermission(IWebBrowser webBrowser, IBrowser browser, IFrame frame, string requestingOrigin, MediaAccessPermissionType requestedPermissions, IMediaAccessCallback callback, GenericEventArgs args)
+		{
+			RequestMediaAccessPermission?.Invoke(webBrowser, browser, frame, requestingOrigin, requestedPermissions, callback, args);
 		}
 
 		public void OnResetDialogState(IWebBrowser webBrowser, IBrowser browser)

@@ -33,6 +33,7 @@ namespace SafeExamBrowser.Browser
 		private readonly IJsDialogHandler javaScriptDialogHandler;
 		private readonly IKeyboardHandler keyboardHandler;
 		private readonly ILogger logger;
+		private readonly IPermissionHandler permissionHandler;
 		private readonly IRenderProcessMessageHandler renderProcessMessageHandler;
 		private readonly IRequestHandler requestHandler;
 
@@ -59,6 +60,7 @@ namespace SafeExamBrowser.Browser
 			IJsDialogHandler javaScriptDialogHandler,
 			IKeyboardHandler keyboardHandler,
 			ILogger logger,
+			IPermissionHandler permissionHandler,
 			IRenderProcessMessageHandler renderProcessMessageHandler,
 			IRequestHandler requestHandler)
 		{
@@ -74,6 +76,7 @@ namespace SafeExamBrowser.Browser
 			this.javaScriptDialogHandler = javaScriptDialogHandler;
 			this.keyboardHandler = keyboardHandler;
 			this.logger = logger;
+			this.permissionHandler = permissionHandler;
 			this.renderProcessMessageHandler = renderProcessMessageHandler;
 			this.requestHandler = requestHandler;
 		}
@@ -148,6 +151,7 @@ namespace SafeExamBrowser.Browser
 			control.LoadingStateChanged += (o, e) => LoadingStateChanged?.Invoke(e.IsLoading);
 			control.OpenUrlFromTab += (w, b, f, u, t, g, a) => a.Value = requestHandler.OnOpenUrlFromTab(w, b, f, u, t, g);
 			control.PreKeyEvent += (IWebBrowser w, IBrowser b, KeyType t, int k, int n, CefEventFlags m, bool i, ref bool s, GenericEventArgs a) => a.Value = keyboardHandler.OnPreKeyEvent(w, b, t, k, n, m, i, ref s);
+			control.RequestMediaAccessPermission += (w, b, f, o, p, c, a) => a.Value = permissionHandler.OnRequestMediaAccessPermission(w, b, f, o, p, c);
 			control.ResetDialogState += (w, b) => javaScriptDialogHandler.OnResetDialogState(w, b);
 			control.ResourceRequestHandlerRequired += (IWebBrowser w, IBrowser b, IFrame f, IRequest r, bool n, bool d, string i, ref bool h, ResourceRequestEventArgs a) => a.Handler = requestHandler.GetResourceRequestHandler(w, b, f, r, n, d, i, ref h);
 			control.RunContextMenu += (w, b, f, p, m, c, a) => a.Value = contextMenuHandler.RunContextMenu(w, b, f, p, m, c);

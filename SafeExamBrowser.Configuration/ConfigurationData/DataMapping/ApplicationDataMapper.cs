@@ -41,8 +41,14 @@ namespace SafeExamBrowser.Configuration.ConfigurationData.DataMapping
 
 						if (isWindowsProcess)
 						{
-							var application = new BlacklistApplication();
 							var isActive = applicationData.TryGetValue(Keys.Applications.Active, out v) && v is bool active && active;
+
+							if (!isActive)
+							{
+								continue;
+							}
+
+							var application = new BlacklistApplication();
 
 							if (applicationData.TryGetValue(Keys.Applications.AutoTerminate, out v) && v is bool autoTerminate)
 							{
@@ -59,18 +65,13 @@ namespace SafeExamBrowser.Configuration.ConfigurationData.DataMapping
 								application.OriginalName = originalName;
 							}
 
-							var defaultEntry = settings.Applications.Blacklist.FirstOrDefault(a =>
+							var alreadyBlacklisted = settings.Applications.Blacklist.Any(a =>
 							{
 								return a.ExecutableName?.Equals(application.ExecutableName, StringComparison.OrdinalIgnoreCase) == true
 									&& a.OriginalName?.Equals(application.OriginalName, StringComparison.OrdinalIgnoreCase) == true;
 							});
 
-							if (defaultEntry != default(BlacklistApplication))
-							{
-								settings.Applications.Blacklist.Remove(defaultEntry);
-							}
-
-							if (isActive)
+							if (!alreadyBlacklisted)
 							{
 								settings.Applications.Blacklist.Add(application);
 							}

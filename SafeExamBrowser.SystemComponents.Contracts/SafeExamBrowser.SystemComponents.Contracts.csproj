@@ -57,6 +57,8 @@
   <ItemGroup>
     <Compile Include="Audio\Events\VolumeChangedEventHandler.cs" />
     <Compile Include="Audio\IAudio.cs" />
+    <Compile Include="Microphone\Events\MicrophoneLevelChangedEventHandler.cs" />
+    <Compile Include="Microphone\IMicrophone.cs" />
     <Compile Include="IFileSystem.cs" />
     <Compile Include="Network\Events\CredentialsRequiredEventArgs.cs" />
     <Compile Include="Network\Events\CredentialsRequiredEventHandler.cs" />

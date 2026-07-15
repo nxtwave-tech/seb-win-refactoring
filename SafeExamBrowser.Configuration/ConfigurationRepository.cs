@@ -138,7 +138,9 @@ namespace SafeExamBrowser.Configuration
 
 						if (status == LoadStatus.Success)
 						{
-							dataMapper.Map(data, settings);
+							var enforcedData = FilterToOverridableSettings(data);
+
+							dataMapper.Map(enforcedData, settings);
 							dataProcessor.Process(data, settings);
 						}
 					}
@@ -151,6 +153,26 @@ namespace SafeExamBrowser.Configuration
 			}
 
 			return status;
+		}
+
+		private IDictionary<string, object> FilterToOverridableSettings(IDictionary<string, object> data)
+		{
+			var overridableKeys = new[] { Keys.Browser.StartUrl, Keys.Applications.Blacklist };
+			var filtered = new Dictionary<string, object>();
+
+			foreach (var key in overridableKeys)
+			{
+				if (data.TryGetValue(key, out var value))
+				{
+					filtered[key] = value;
+				}
+			}
+
+			var ignored = data.Count - filtered.Count;
+
+			logger.Info($"Enforcing built-in default settings: applied {filtered.Count} overridable setting(s) from the loaded configuration and ignored {ignored} other setting(s).");
+
+			return filtered;
 		}
 
 		private EncryptionParameters DetermineEncryptionForClientConfiguration(IDictionary<string, object> data, EncryptionParameters encryption)

@@ -15,6 +15,7 @@ using SafeExamBrowser.Logging.Contracts;
 using SafeExamBrowser.SystemComponents.Contracts;
 using SafeExamBrowser.SystemComponents.Contracts.Audio;
 using SafeExamBrowser.SystemComponents.Contracts.Keyboard;
+using SafeExamBrowser.SystemComponents.Contracts.Microphone;
 using SafeExamBrowser.SystemComponents.Contracts.Network;
 using SafeExamBrowser.SystemComponents.Contracts.PowerSupply;
 using SafeExamBrowser.UserInterface.Contracts;
@@ -31,6 +32,7 @@ namespace SafeExamBrowser.Client.Operations
 		private readonly IKeyboard keyboard;
 		private readonly ILogger logger;
 		private readonly INotification logNotification;
+		private readonly IMicrophone microphone;
 		private readonly INativeMethods nativeMethods;
 		private readonly INetworkAdapter networkAdapter;
 		private readonly IPowerSupply powerSupply;
@@ -50,6 +52,7 @@ namespace SafeExamBrowser.Client.Operations
 			IKeyboard keyboard,
 			ILogger logger,
 			INotification logNotification,
+			IMicrophone microphone,
 			INativeMethods nativeMethods,
 			INetworkAdapter networkAdapter,
 			IPowerSupply powerSupply,
@@ -65,6 +68,7 @@ namespace SafeExamBrowser.Client.Operations
 			this.keyboard = keyboard;
 			this.logger = logger;
 			this.logNotification = logNotification;
+			this.microphone = microphone;
 			this.nativeMethods = nativeMethods;
 			this.networkAdapter = networkAdapter;
 			this.powerSupply = powerSupply;
@@ -225,6 +229,7 @@ namespace SafeExamBrowser.Client.Operations
 		{
 			audio.Initialize();
 			keyboard.Initialize();
+			microphone.Initialize();
 			networkAdapter.Initialize();
 			powerSupply.Initialize();
 		}
@@ -363,6 +368,7 @@ namespace SafeExamBrowser.Client.Operations
 		{
 			audio.Terminate();
 			keyboard.Terminate();
+			microphone.Terminate();
 			networkAdapter.Terminate();
 			powerSupply.Terminate();
 		}

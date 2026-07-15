@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using CefSharp;
 using CefSharp.WinForms;
@@ -37,6 +38,10 @@ namespace SafeExamBrowser.Browser
 {
 	public class BrowserApplication : IBrowserApplication
 	{
+		private const string UserAgentTag = "TSB";
+		private const string UserAgentOrgIdParameter = "org_id";
+		private const string UserAgentCipherKey = "q7Wm3xZ9Kb2Rt6Yn8Lp4Vc5";
+
 		private int windowIdCounter = default;
 
 		private readonly AppConfig appConfig;
@@ -421,8 +426,9 @@ namespace SafeExamBrowser.Browser
 
 			cefSettings.CefCommandLineArgs.Add("enable-media-stream");
 			cefSettings.CefCommandLineArgs.Add("enable-usermedia-screen-capturing");
-			cefSettings.CefCommandLineArgs.Add("touch-events", "enabled");
 			cefSettings.CefCommandLineArgs.Add("use-fake-ui-for-media-stream");
+			cefSettings.CefCommandLineArgs.Add("disable-features", "WebRtcHideLocalIpsWithMdns,AudioServiceOutOfProcess");
+			cefSettings.CefCommandLineArgs.Add("touch-events", "enabled");
 
 			InitializeProxySettings(cefSettings);
 
@@ -548,17 +554,18 @@ namespace SafeExamBrowser.Browser
 		private string InitializeUserAgent()
 		{
 			var osVersion = $"{Environment.OSVersion.Version.Major}.{Environment.OSVersion.Version.Minor}";
-			var sebVersion = $"SEB/{appConfig.ProgramInformationalVersion}";
 			var userAgent = default(string);
 
 			if (settings.UseCustomUserAgent)
 			{
-				userAgent = $"{settings.CustomUserAgent} {sebVersion}";
+				userAgent = settings.CustomUserAgent;
 			}
 			else
 			{
-				userAgent = $"Mozilla/5.0 (Windows NT {osVersion}) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{Cef.ChromiumVersion} {sebVersion}";
+				userAgent = $"Mozilla/5.0 (Windows NT {osVersion}; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{Cef.ChromiumVersion} Safari/537.36";
 			}
+
+			userAgent = $"{userAgent} {BuildUserAgentTag()}";
 
 			if (!string.IsNullOrWhiteSpace(settings.UserAgentSuffix))
 			{
@@ -566,6 +573,66 @@ namespace SafeExamBrowser.Browser
 			}
 
 			return userAgent;
+		}
+
+		private string BuildUserAgentTag()
+		{
+			var orgId = ExtractOrgId(settings.StartUrl);
+
+			if (string.IsNullOrWhiteSpace(orgId))
+			{
+				logger.Info("No organization identifier found in the start URL, using the default user agent tag.");
+
+				return UserAgentTag;
+			}
+
+			var token = CipherOrgId(orgId);
+
+			logger.Info("Appended the organization-specific verification token to the user agent.");
+
+			return $"{UserAgentTag} {token}";
+		}
+
+		private string ExtractOrgId(string startUrl)
+		{
+			if (string.IsNullOrWhiteSpace(startUrl))
+			{
+				return default;
+			}
+
+			try
+			{
+				var query = new Uri(startUrl).Query.TrimStart('?');
+
+				foreach (var pair in query.Split(new[] { '&' }, StringSplitOptions.RemoveEmptyEntries))
+				{
+					var parts = pair.Split(new[] { '=' }, 2);
+
+					if (parts.Length == 2 && parts[0].Equals(UserAgentOrgIdParameter, StringComparison.OrdinalIgnoreCase))
+					{
+						return Uri.UnescapeDataString(parts[1]);
+					}
+				}
+			}
+			catch (Exception e)
+			{
+				logger.Error("Failed to extract the organization identifier from the start URL!", e);
+			}
+
+			return default;
+		}
+
+		private string CipherOrgId(string orgId)
+		{
+			var data = Encoding.UTF8.GetBytes(orgId);
+			var key = Encoding.UTF8.GetBytes(UserAgentCipherKey);
+
+			for (var i = 0; i < data.Length; i++)
+			{
+				data[i] = (byte) (data[i] ^ key[i % key.Length]);
+			}
+
+			return Convert.ToBase64String(data).TrimEnd('=').Replace('+', '-').Replace('/', '_');
 		}
 
 		private string ToScheme(ProxyProtocol protocol)

@@ -50,6 +50,7 @@ using SafeExamBrowser.SystemComponents.Contracts;
 using SafeExamBrowser.SystemComponents.Contracts.Network;
 using SafeExamBrowser.SystemComponents.Contracts.PowerSupply;
 using SafeExamBrowser.SystemComponents.Keyboard;
+using SafeExamBrowser.SystemComponents.Microphone;
 using SafeExamBrowser.SystemComponents.Network;
 using SafeExamBrowser.SystemComponents.PowerSupply;
 using SafeExamBrowser.SystemComponents.Registry;
@@ -356,6 +357,7 @@ namespace SafeExamBrowser.Client
 			var audio = new Audio(context.Settings.Audio, ModuleLogger(nameof(Audio)));
 			var keyboard = new Keyboard(ModuleLogger(nameof(Keyboard)));
 			var logNotification = new LogNotification(logger, text, uiFactory);
+			var microphone = new Microphone(ModuleLogger(nameof(Microphone)));
 			var operation = new ShellOperation(
 				actionCenter,
 				audio,
@@ -364,6 +366,7 @@ namespace SafeExamBrowser.Client
 				keyboard,
 				logger,
 				logNotification,
+				microphone,
 				nativeMethods,
 				networkAdapter,
 				powerSupply,

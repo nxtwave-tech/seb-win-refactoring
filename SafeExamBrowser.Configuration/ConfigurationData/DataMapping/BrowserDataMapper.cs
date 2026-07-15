@@ -21,6 +21,17 @@ namespace SafeExamBrowser.Configuration.ConfigurationData.DataMapping
 		{
 			switch (key)
 			{
+				case Keys.Browser.AllowAudioCapture:
+				case Keys.Browser.MediaCaptureMicrophone:
+					MapAllowAudioCapture(settings, value);
+					break;
+				case Keys.Browser.AllowVideoCapture:
+				case Keys.Browser.MediaCaptureCamera:
+					MapAllowVideoCapture(settings, value);
+					break;
+				case Keys.Browser.MediaCaptureScreen:
+					MapAllowScreenCapture(settings, value);
+					break;
 				case Keys.Browser.AllowConfigurationDownloads:
 					MapAllowConfigurationDownloads(settings, value);
 					break;
@@ -192,6 +203,30 @@ namespace SafeExamBrowser.Configuration.ConfigurationData.DataMapping
 			if (value is bool allow)
 			{
 				settings.Browser.MainWindow.AllowAddressBar = allow;
+			}
+		}
+
+		private void MapAllowAudioCapture(AppSettings settings, object value)
+		{
+			if (value is bool allow)
+			{
+				settings.Browser.AllowAudioCapture = allow;
+			}
+		}
+
+		private void MapAllowScreenCapture(AppSettings settings, object value)
+		{
+			if (value is bool allow)
+			{
+				settings.Browser.AllowScreenCapture = allow;
+			}
+		}
+
+		private void MapAllowVideoCapture(AppSettings settings, object value)
+		{
+			if (value is bool allow)
+			{
+				settings.Browser.AllowVideoCapture = allow;
 			}
 		}
 

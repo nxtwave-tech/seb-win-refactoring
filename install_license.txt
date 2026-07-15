@@ -1,5 +1,5 @@
 Topin Secure Browser for Windows
-Copyright © 2010-2025 ETH Zürich, IT Services. Modifications © 2025 NxtWave.
+Copyright © 2010-2025 ETH Zürich, IT Services. Modifications © 2026 NxtWave.
 This application is subject to the terms of the Mozilla Public License, version 2.0. If a copy of the MPL was not distributed with this application, you can obtain one at http://mozilla.org/MPL/2.0/.
 See https://github.com/SafeExamBrowser for more information about Topin Secure Browser.
 

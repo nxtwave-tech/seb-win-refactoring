@@ -42,7 +42,12 @@ namespace SafeExamBrowser.Configuration.ConfigurationData
 
 		internal static class Browser
 		{
+			internal const string AllowAudioCapture = "allowAudioCapture";
 			internal const string AllowConfigurationDownloads = "downloadAndOpenSebConfig";
+			internal const string AllowVideoCapture = "allowVideoCapture";
+			internal const string MediaCaptureCamera = "browserMediaCaptureCamera";
+			internal const string MediaCaptureMicrophone = "browserMediaCaptureMicrophone";
+			internal const string MediaCaptureScreen = "browserMediaCaptureScreen";
 			internal const string AllowCustomDownUploadLocation = "allowCustomDownUploadLocation";
 			internal const string AllowDeveloperConsole = "allowDeveloperConsole";
 			internal const string AllowDownloads = "allowDownloads";

@@ -58,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Audio\Audio.cs" />
+    <Compile Include="Microphone\Microphone.cs" />
     <Compile Include="FileSystem.cs" />
     <Compile Include="Keyboard\KeyboardLayout.cs" />
     <Compile Include="Keyboard\Keyboard.cs" />
