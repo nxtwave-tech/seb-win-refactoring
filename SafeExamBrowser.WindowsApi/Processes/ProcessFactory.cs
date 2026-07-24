@@ -43,9 +43,9 @@ namespace SafeExamBrowser.WindowsApi.Processes
 			{
 				if (names.Any(n => n.processId == process.Id))
 				{
-					var (_, name, originalName, path, signature) = names.First(n => n.processId == process.Id);
+					var info = names.First(n => n.processId == process.Id);
 
-					processes.Add(new Process(process, name, originalName, LoggerFor(process, name), path, signature));
+					processes.Add(new Process(process, info.name, info.originalName, LoggerFor(process, info.name), info.path, info.signature, info.companyName, info.fileDescription, info.productName));
 				}
 			}
 
@@ -67,8 +67,8 @@ namespace SafeExamBrowser.WindowsApi.Processes
 				raw = StartNormal(path, args);
 			}
 
-			var (name, originalName, _, signature) = LoadProcessNamesFor(raw);
-			var process = new Process(raw, name, originalName, LoggerFor(raw, name), path, signature);
+			var info = LoadProcessNamesFor(raw);
+			var process = new Process(raw, info.name, info.originalName, LoggerFor(raw, info.name), path, info.signature, info.companyName, info.fileDescription, info.productName);
 
 			logger.Info($"Successfully started process '{path}' with ID = {process.Id}.");
 
@@ -82,9 +82,9 @@ namespace SafeExamBrowser.WindowsApi.Processes
 			try
 			{
 				var raw = System.Diagnostics.Process.GetProcessById(id);
-				var (name, originalName, path, signature) = LoadProcessNamesFor(raw);
+				var info = LoadProcessNamesFor(raw);
 
-				process = new Process(raw, name, originalName, LoggerFor(raw, name), path, signature);
+				process = new Process(raw, info.name, info.originalName, LoggerFor(raw, info.name), info.path, info.signature, info.companyName, info.fileDescription, info.productName);
 			}
 			catch (Exception e)
 			{
@@ -94,9 +94,9 @@ namespace SafeExamBrowser.WindowsApi.Processes
 			return process != default(IProcess);
 		}
 
-		private IEnumerable<(int processId, string name, string originalName, string path, string signature)> LoadAllProcessNames()
+		private IEnumerable<(int processId, string name, string originalName, string companyName, string fileDescription, string productName, string path, string signature)> LoadAllProcessNames()
 		{
-			var names = new List<(int, string, string, string, string)>();
+			var names = new List<(int, string, string, string, string, string, string, string)>();
 
 			try
 			{
@@ -111,17 +111,20 @@ namespace SafeExamBrowser.WindowsApi.Processes
 						{
 							var name = Convert.ToString(process["Name"]);
 							var originalName = default(string);
+							var companyName = default(string);
+							var fileDescription = default(string);
+							var productName = default(string);
 							var path = Convert.ToString(process["ExecutablePath"]);
 							var processId = Convert.ToInt32(process["ProcessId"]);
 							var signature = default(string);
 
 							if (File.Exists(path))
 							{
-								TryLoadOriginalName(path, out originalName);
+								TryLoadVersionInfo(path, out originalName, out companyName, out fileDescription, out productName);
 								TryLoadSignature(path, out signature);
 							}
 
-							names.Add((processId, name, originalName, path, signature));
+							names.Add((processId, name, originalName, companyName, fileDescription, productName, path, signature));
 						}
 
 					}
@@ -135,10 +138,13 @@ namespace SafeExamBrowser.WindowsApi.Processes
 			return names;
 		}
 
-		private (string name, string originalName, string path, string signature) LoadProcessNamesFor(System.Diagnostics.Process process)
+		private (string name, string originalName, string companyName, string fileDescription, string productName, string path, string signature) LoadProcessNamesFor(System.Diagnostics.Process process)
 		{
 			var name = process.ProcessName;
 			var originalName = default(string);
+			var companyName = default(string);
+			var fileDescription = default(string);
+			var productName = default(string);
 			var path = default(string);
 			var signature = default(string);
 
@@ -153,7 +159,7 @@ namespace SafeExamBrowser.WindowsApi.Processes
 
 					if (File.Exists(path))
 					{
-						TryLoadOriginalName(path, out originalName);
+						TryLoadVersionInfo(path, out originalName, out companyName, out fileDescription, out productName);
 						TryLoadSignature(path, out signature);
 					}
 				}
@@ -163,7 +169,7 @@ namespace SafeExamBrowser.WindowsApi.Processes
 				logger.Error($"Failed to load process names for {process.ProcessName}!", e);
 			}
 
-			return (name, originalName, path, signature);
+			return (name, originalName, companyName, fileDescription, productName, path, signature);
 		}
 
 		private ILogger LoggerFor(System.Diagnostics.Process process, string name)
@@ -207,13 +213,21 @@ namespace SafeExamBrowser.WindowsApi.Processes
 			throw new Win32Exception(errorCode);
 		}
 
-		private bool TryLoadOriginalName(string path, out string originalName)
+		private bool TryLoadVersionInfo(string path, out string originalName, out string companyName, out string fileDescription, out string productName)
 		{
 			originalName = default;
+			companyName = default;
+			fileDescription = default;
+			productName = default;
 
 			try
 			{
-				originalName = FileVersionInfo.GetVersionInfo(path).OriginalFilename;
+				var versionInfo = FileVersionInfo.GetVersionInfo(path);
+
+				originalName = versionInfo.OriginalFilename;
+				companyName = versionInfo.CompanyName;
+				fileDescription = versionInfo.FileDescription;
+				productName = versionInfo.ProductName;
 			}
 			catch
 			{

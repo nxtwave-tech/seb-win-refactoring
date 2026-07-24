@@ -33,6 +33,9 @@ namespace SafeExamBrowser.WindowsApi.Processes
 
 		public string Name { get; }
 		public string OriginalName { get; }
+		public string CompanyName { get; }
+		public string FileDescription { get; }
+		public string ProductName { get; }
 		public string Path { get; }
 		public string Signature { get; }
 
@@ -44,12 +47,15 @@ namespace SafeExamBrowser.WindowsApi.Processes
 			remove { TerminatedEvent -= value; }
 		}
 
-		internal Process(System.Diagnostics.Process process, string name, string originalName, ILogger logger, string path, string signature)
+		internal Process(System.Diagnostics.Process process, string name, string originalName, ILogger logger, string path, string signature, string companyName = default, string fileDescription = default, string productName = default)
 		{
 			this.logger = logger;
 			this.process = process;
 			this.Name = name;
 			this.OriginalName = originalName;
+			this.CompanyName = companyName;
+			this.FileDescription = fileDescription;
+			this.ProductName = productName;
 			this.Path = path;
 			this.Signature = signature?.ToLower();
 		}

@@ -21,6 +21,22 @@ namespace SafeExamBrowser.Monitoring.Applications
 {
 	public class ApplicationMonitor : IApplicationMonitor
 	{
+		/// <summary>
+		/// Distinctive keywords identifying remote-control and screen-sharing tools. These are matched (case-insensitive, as substrings)
+		/// against the executable name and the embedded version information of a process, so that such tools are detected even when their
+		/// executable has been renamed. The list is intentionally hardcoded (like the virtual machine detection heuristics)
+		/// so it cannot be weakened via a modified configuration.
+		/// </summary>
+		private static readonly string[] RemoteToolKeywords =
+		{
+			"teamviewer", "anydesk", "rustdesk", "ultraviewer", "splashtop", "realvnc", "tightvnc", "ultravnc", "tigervnc",
+			"radmin", "supremo", "aeroadmin", "ammyy", "logmein", "gotomypc", "gotoassist", "zoho assist", "quick assist",
+			"quickassist", "screenconnect", "connectwise", "dwservice", "dwagent", "getscreen", "todesk", "sunlogin",
+			"nomachine", "parsec", "deskin", "remote utilities", "remoteutilities", "dameware", "mikogo", "showmypc", "litemanager",
+			"remotepc", "distant desktop", "chrome remote desktop", "vnc server", "vnc viewer", "obs studio", "streamlabs",
+			"xsplit", "bandicam", "camtasia", "sharex", "mstsc"
+		};
+
 		private readonly IList<BlacklistApplication> blacklist;
 		private readonly ILogger logger;
 		private readonly INativeMethods nativeMethods;
@@ -55,6 +71,7 @@ namespace SafeExamBrowser.Monitoring.Applications
 			InitializeProcesses();
 			InitializeBlacklist(settings, result);
 			InitializeWhitelist(settings, result);
+			InitializeRemoteToolHeuristics(result);
 
 			return result;
 		}
@@ -185,7 +202,7 @@ namespace SafeExamBrowser.Monitoring.Applications
 
 		private void AddFailed(IProcess process, List<RunningApplication> failed)
 		{
-			var name = blacklist.First(a => BelongsToApplication(process, a)).ExecutableName;
+			var name = blacklist.FirstOrDefault(a => BelongsToApplication(process, a))?.ExecutableName ?? process.Name;
 			var application = failed.FirstOrDefault(a => a.Name == name);
 
 			if (application == default(RunningApplication))
@@ -350,6 +367,53 @@ namespace SafeExamBrowser.Monitoring.Applications
 			}
 		}
 
+		private void InitializeRemoteToolHeuristics(InitializationResult result)
+		{
+			foreach (var process in processes)
+			{
+				if (BelongsToSafeExamBrowser(process) || IsWhitelisted(process, out _))
+				{
+					continue;
+				}
+
+				if (blacklist.Any(a => BelongsToApplication(process, a)))
+				{
+					continue;
+				}
+
+				if (IsProhibitedRemoteTool(process, out var keyword))
+				{
+					logger.Warn($"Process {process} matches prohibited remote/screen-sharing heuristic (keyword: '{keyword}') [{process.GetAdditionalInfo()}].");
+					AddForTermination(process.Name, process, result);
+				}
+			}
+		}
+
+		private bool IsProhibitedRemoteTool(IProcess process, out string matchedKeyword)
+		{
+			matchedKeyword = default;
+
+			var metadata = new[] { process.Name, process.OriginalName, process.CompanyName, process.FileDescription, process.ProductName };
+			var haystack = string.Join("\n", metadata.Where(value => !string.IsNullOrWhiteSpace(value))).ToLowerInvariant();
+
+			if (string.IsNullOrWhiteSpace(haystack))
+			{
+				return false;
+			}
+
+			foreach (var keyword in RemoteToolKeywords)
+			{
+				if (haystack.Contains(keyword))
+				{
+					matchedKeyword = keyword;
+
+					return true;
+				}
+			}
+
+			return false;
+		}
+
 		private bool IsAllowed(IProcess process)
 		{
 			foreach (var application in blacklist)
@@ -360,6 +424,13 @@ namespace SafeExamBrowser.Monitoring.Applications
 
 					return false;
 				}
+			}
+
+			if (!BelongsToSafeExamBrowser(process) && !IsWhitelisted(process, out _) && IsProhibitedRemoteTool(process, out var keyword))
+			{
+				logger.Warn($"Process {process} matches prohibited remote/screen-sharing heuristic (keyword: '{keyword}')!");
+
+				return false;
 			}
 
 			return true;

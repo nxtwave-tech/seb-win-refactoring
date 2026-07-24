@@ -36,6 +36,21 @@ namespace SafeExamBrowser.WindowsApi.Contracts
 		string OriginalName { get; }
 
 		/// <summary>
+		/// The company name specified in the version information of the process executable, if available.
+		/// </summary>
+		string CompanyName { get; }
+
+		/// <summary>
+		/// The file description specified in the version information of the process executable, if available.
+		/// </summary>
+		string FileDescription { get; }
+
+		/// <summary>
+		/// The product name specified in the version information of the process executable, if available.
+		/// </summary>
+		string ProductName { get; }
+
+		/// <summary>
 		/// The full path of the process executable.
 		/// </summary>
 		string Path { get; }
