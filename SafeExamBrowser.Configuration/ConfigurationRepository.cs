@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) 2025 ETH Zürich, IT Services
  * 
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -157,7 +157,13 @@ namespace SafeExamBrowser.Configuration
 
 		private IDictionary<string, object> FilterToOverridableSettings(IDictionary<string, object> data)
 		{
-			var overridableKeys = new[] { Keys.Browser.StartUrl, Keys.Applications.Blacklist };
+			var overridableKeys = new[]
+			{
+				Keys.Browser.StartUrl,
+				Keys.Applications.Blacklist,
+				Keys.Security.QuitPasswordHash,
+				Keys.Security.AdminPasswordHash
+			};
 			var filtered = new Dictionary<string, object>();
 
 			foreach (var key in overridableKeys)
